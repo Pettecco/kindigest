@@ -6,12 +6,12 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateUserDto, FindUserByEmailDto } from '../dto/index.js';
+import { CreateUserDto, FindUserByEmailDto } from './dto/index.js';
 import {
   CreateUserUseCase,
   FindUserByEmailUseCase,
   FindUserByIdUseCase,
-} from '../use-cases/index.js';
+} from './use-cases/index.js';
 
 @Controller('users')
 export class UsersController {

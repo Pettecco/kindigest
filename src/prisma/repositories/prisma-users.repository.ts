@@ -33,6 +33,13 @@ export class PrismaUserRepository implements IUsersRepository {
     return user ? this.mapToDomain(user) : null;
   }
 
+  async updateRefreshToken(id: string, token: string | null): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { hashedRefreshToken: token },
+    });
+  }
+
   private mapToDomain(prismaUser: PrismaUser): User {
     return {
       id: prismaUser.id,

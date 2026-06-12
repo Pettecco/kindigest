@@ -4,7 +4,6 @@ CREATE TYPE "PreferredDisplayMode" AS ENUM ('IMMERSIVE', 'TRANSLATED');
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,
-    "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "hashedRefreshToken" TEXT,

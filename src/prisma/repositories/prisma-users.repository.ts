@@ -44,6 +44,8 @@ export class PrismaUserRepository implements IUsersRepository {
     return {
       id: prismaUser.id,
       email: prismaUser.email,
+      passwordHash: prismaUser.passwordHash,
+      hashedRefreshToken: prismaUser.hashedRefreshToken,
       preferredDisplayMode: prismaUser.preferredDisplayMode,
       createdAt: prismaUser.createdAt,
     };

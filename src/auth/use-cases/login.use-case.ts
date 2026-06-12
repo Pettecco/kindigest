@@ -1,10 +1,8 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigType } from '@nestjs/config';
 import { IHashingService } from '../hashing/hashing.service.js';
 import { IUsersRepository } from '../../users/domain/user-repository.js';
 import { TokenDto } from '../dto/token.dto.js';
-import jwtConfig from '../config/jwt.config.js';
 
 @Injectable()
 export class LoginUseCase {
@@ -12,8 +10,6 @@ export class LoginUseCase {
     private usersRepository: IUsersRepository,
     private hashingService: IHashingService,
     private jwtService: JwtService,
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async execute(email: string, password: string): Promise<TokenDto> {
@@ -34,13 +30,13 @@ export class LoginUseCase {
 
     const accessToken = await this.signJwtAsync(
       user.id,
-      this.jwtConfiguration.jwtTtl,
+      Number(process.env.JWT_TTL) || 900,
       { email: user.email },
     );
 
     const refreshToken = await this.signJwtAsync(
       user.id,
-      this.jwtConfiguration.jwtRefreshTtl,
+      Number(process.env.JWT_REFRESH_TTL) || 604800,
     );
 
     await this.usersRepository.updateRefreshToken(user.id, refreshToken);
@@ -59,9 +55,9 @@ export class LoginUseCase {
         ...payload,
       },
       {
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        secret: this.jwtConfiguration.secret,
+        audience: process.env.JWT_TOKEN_AUDIENCE || 'kindigest',
+        issuer: process.env.JWT_TOKEN_ISSUER || 'kindigest',
+        secret: process.env.JWT_SECRET,
         expiresIn,
       },
     );

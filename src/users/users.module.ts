@@ -4,27 +4,17 @@ import { FindUserByEmailUseCase } from './use-cases/find-user-by-email.use-case.
 import { FindUserByIdUseCase } from './use-cases/find-user-by-id.use-case.js';
 import { UsersController } from './users.controller.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
-import { AuthModule } from '../auth/auth.module.js';
-import { IUsersRepository } from './domain/user-repository.js';
-import { PrismaUserRepository } from '../prisma/repositories/prisma-users.repository.js';
+import { makeHashingFactory } from '../common/factories/hashing.factory.js';
 
 @Module({
   imports: [PrismaModule],
   providers: [
+    makeHashingFactory,
     CreateUserUseCase,
     FindUserByEmailUseCase,
     FindUserByIdUseCase,
-    {
-      provide: IUsersRepository,
-      useClass: PrismaUserRepository,
-    },
   ],
   controllers: [UsersController],
-  exports: [
-    CreateUserUseCase,
-    FindUserByEmailUseCase,
-    FindUserByIdUseCase,
-    IUsersRepository,
-  ],
+  exports: [CreateUserUseCase, FindUserByEmailUseCase, FindUserByIdUseCase],
 })
 export class UsersModule {}

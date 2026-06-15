@@ -1,9 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto.js';
 import { LoginUseCase } from './use-cases/login.use-case.js';
 import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case.js';
@@ -26,14 +21,17 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
-  async refresh(@TokenPayloadParam() payload: { sub: string; refreshToken: string }) {
-    return this.refreshTokenUseCase.execute(payload.sub, payload.refreshToken);
+  async refresh(
+    @TokenPayloadParam('sub') userId: string,
+    @TokenPayloadParam('refreshToken') refreshToken: string,
+  ) {
+    return this.refreshTokenUseCase.execute(userId, refreshToken);
   }
 
   @UseGuards(RefreshTokenGuard)
   @Post('logout')
-  async logout(@TokenPayloadParam() payload: { sub: string }) {
-    await this.logoutUseCase.execute(payload.sub);
-    return { message: 'Logout realizado com sucesso' };
+  async logout(@TokenPayloadParam('sub') userId: string) {
+    await this.logoutUseCase.execute(userId);
+    return { message: 'Logout successful' };
   }
 }

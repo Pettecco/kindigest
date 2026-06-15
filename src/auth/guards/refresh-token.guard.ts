@@ -5,31 +5,44 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
+import type { Request } from 'express';
 import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants.js';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request: Request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const refreshToken = this.extractTokenFromHeader(request);
 
     if (!refreshToken) {
-      throw new UnauthorizedException('Refresh token não informado!');
+      throw new UnauthorizedException('Refresh token not provided');
     }
 
     try {
       const payload = await this.jwtService.verifyAsync(refreshToken, {
-        secret: process.env.JWT_SECRET,
-        audience: process.env.JWT_TOKEN_AUDIENCE || 'kindigest',
-        issuer: process.env.JWT_TOKEN_ISSUER || 'kindigest',
+        secret: this.configService.get<string>('jwt.secret'),
+        audience: this.configService.get<string>('jwt.audience'),
+        issuer: this.configService.get<string>('jwt.issuer'),
       });
 
-      request[REQUEST_TOKEN_PAYLOAD_KEY] = { ...payload, refreshToken };
+      const payloadWithToken = {
+        ...payload,
+        refreshToken,
+      };
+
+      (
+        request as Request & {
+          [REQUEST_TOKEN_PAYLOAD_KEY]: typeof payloadWithToken;
+        }
+      )[REQUEST_TOKEN_PAYLOAD_KEY] = payloadWithToken;
     } catch (error) {
-      throw new UnauthorizedException(error.message);
+      throw new UnauthorizedException((error as Error).message);
     }
 
     return true;

@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { IHashingService } from '../hashing/hashing.service.js';
 import { IUsersRepository } from '../../users/domain/user-repository.js';
 import { TokenDto } from '../dto/token.dto.js';
@@ -10,13 +11,14 @@ export class LoginUseCase {
     private usersRepository: IUsersRepository,
     private hashingService: IHashingService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async execute(email: string, password: string): Promise<TokenDto> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Usuário não autorizado');
+      throw new UnauthorizedException('User not authorized');
     }
 
     const isPasswordValid = await this.hashingService.compare(
@@ -25,41 +27,37 @@ export class LoginUseCase {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Senha inválida!');
+      throw new UnauthorizedException('Invalid password');
     }
 
-    const accessToken = await this.signJwtAsync(
-      user.id,
-      Number(process.env.JWT_TTL) || 900,
-      { email: user.email },
+    const audience = this.configService.get<string>('jwt.audience');
+    const issuer = this.configService.get<string>('jwt.issuer');
+    const secret = this.configService.get<string>('jwt.secret');
+    const ttl = this.configService.get<number>('jwt.jwtTtl');
+    const refreshTtl = this.configService.get<number>('jwt.jwtRefreshTtl');
+
+    const accessToken = await this.jwtService.signAsync(
+      { sub: user.id },
+      {
+        audience,
+        issuer,
+        secret,
+        expiresIn: ttl,
+      },
     );
 
-    const refreshToken = await this.signJwtAsync(
-      user.id,
-      Number(process.env.JWT_REFRESH_TTL) || 604800,
+    const refreshToken = await this.jwtService.signAsync(
+      { sub: user.id },
+      {
+        audience,
+        issuer,
+        secret,
+        expiresIn: refreshTtl,
+      },
     );
 
     await this.usersRepository.updateRefreshToken(user.id, refreshToken);
 
     return { accessToken, refreshToken };
-  }
-
-  private async signJwtAsync<T>(
-    sub: string,
-    expiresIn: number,
-    payload?: T,
-  ): Promise<string> {
-    return await this.jwtService.signAsync(
-      {
-        sub,
-        ...payload,
-      },
-      {
-        audience: process.env.JWT_TOKEN_AUDIENCE || 'kindigest',
-        issuer: process.env.JWT_TOKEN_ISSUER || 'kindigest',
-        secret: process.env.JWT_SECRET,
-        expiresIn,
-      },
-    );
   }
 }

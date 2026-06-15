@@ -1,10 +1,32 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
-import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants.js';
+import {
+  REQUEST_TOKEN_PAYLOAD_KEY,
+  RefreshTokenPayloadWithToken,
+  AccessTokenPayload,
+} from '../auth.constants.js';
+
+type AllPayloadKeys =
+  | keyof AccessTokenPayload
+  | keyof RefreshTokenPayloadWithToken;
 
 export const TokenPayloadParam = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
+  (data: AllPayloadKeys | undefined, ctx: ExecutionContext) => {
     const request: Request = ctx.switchToHttp().getRequest();
-    return request[REQUEST_TOKEN_PAYLOAD_KEY];
+    const payload = request[REQUEST_TOKEN_PAYLOAD_KEY];
+
+    if (!payload) {
+      throw new UnauthorizedException('Token not found');
+    }
+
+    if (data) {
+      return payload[data as keyof typeof payload];
+    }
+
+    return payload;
   },
 );

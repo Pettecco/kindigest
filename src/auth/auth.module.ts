@@ -9,17 +9,21 @@ import { LogoutUseCase } from './use-cases/logout.use-case.js';
 import { UsersModule } from '../users/users.module.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { RefreshTokenGuard } from './guards/refresh-token.guard.js';
+import jwtConfig from './config/jwt.config.js';
 
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: Number(process.env.JWT_TTL) || 900,
-        audience: process.env.JWT_TOKEN_AUDIENCE || 'kindigest',
-        issuer: process.env.JWT_TOKEN_ISSUER || 'kindigest',
-      },
+    JwtModule.registerAsync({
+      inject: [jwtConfig as any],
+      useFactory: (config: ReturnType<typeof jwtConfig>) => ({
+        secret: config.secret,
+        signOptions: {
+          expiresIn: config.jwtTtl,
+          audience: config.audience,
+          issuer: config.issuer,
+        },
+      }),
     }),
   ],
   controllers: [AuthController],

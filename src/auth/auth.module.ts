@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { BcryptService } from './hashing/bcrypt.service.js';
-import { IHashingService } from './hashing/hashing.service.js';
+import { IHashingServiceSymbol } from './hashing/hashing.service.js';
 import { AuthController } from './auth.controller.js';
 import { LoginUseCase } from './use-cases/login.use-case.js';
 import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case.js';
@@ -29,7 +29,7 @@ import jwtConfig from './config/jwt.config.js';
   controllers: [AuthController],
   providers: [
     {
-      provide: IHashingService,
+      provide: IHashingServiceSymbol,
       useClass: BcryptService,
     },
     LoginUseCase,
@@ -38,6 +38,6 @@ import jwtConfig from './config/jwt.config.js';
     JwtAuthGuard,
     RefreshTokenGuard,
   ],
-  exports: [IHashingService, JwtModule, JwtAuthGuard, RefreshTokenGuard],
+  exports: [IHashingServiceSymbol, JwtModule, JwtAuthGuard, RefreshTokenGuard],
 })
 export class AuthModule {}

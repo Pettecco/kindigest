@@ -1,14 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IHashingService } from '../hashing/hashing.service.js';
-import { IUsersRepository } from '../../users/domain/user-repository.js';
+import { Inject } from '@nestjs/common';
+import { IHashingServiceSymbol } from '../hashing/hashing.service.js';
+import type { IHashingService } from '../hashing/hashing.service.js';
+import type { IUsersRepository } from '../../users/domain/user-repository.js';
 import { TokenDto } from '../dto/token.dto.js';
 
 @Injectable()
 export class LoginUseCase {
   constructor(
     private usersRepository: IUsersRepository,
+    @Inject(IHashingServiceSymbol)
     private hashingService: IHashingService,
     private jwtService: JwtService,
     private configService: ConfigService,
@@ -56,7 +59,8 @@ export class LoginUseCase {
       },
     );
 
-    await this.usersRepository.updateRefreshToken(user.id, refreshToken);
+    const hashedRefreshToken = await this.hashingService.hash(refreshToken);
+    await this.usersRepository.updateRefreshToken(user.id, hashedRefreshToken);
 
     return { accessToken, refreshToken };
   }

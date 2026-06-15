@@ -1,7 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IUsersRepository } from '../../users/domain/user-repository.js';
+import { Inject } from '@nestjs/common';
+import { IHashingServiceSymbol } from '../hashing/hashing.service.js';
+import type { IHashingService } from '../hashing/hashing.service.js';
+import type { IUsersRepository } from '../../users/domain/user-repository.js';
 import { TokenDto } from '../dto/token.dto.js';
 
 @Injectable()
@@ -10,6 +13,8 @@ export class RefreshTokenUseCase {
     private jwtService: JwtService,
     private usersRepository: IUsersRepository,
     private configService: ConfigService,
+    @Inject(IHashingServiceSymbol)
+    private hashingService: IHashingService,
   ) {}
 
   async execute(userId: string, refreshToken: string): Promise<TokenDto> {
@@ -35,6 +40,15 @@ export class RefreshTokenUseCase {
       issuer,
     });
 
+    const isRefreshTokenValid = await this.hashingService.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+
+    if (!isRefreshTokenValid) {
+      throw new UnauthorizedException('Refresh token invalid');
+    }
+
     const accessToken = await this.jwtService.signAsync(
       { sub: user.id },
       {
@@ -55,7 +69,12 @@ export class RefreshTokenUseCase {
       },
     );
 
-    await this.usersRepository.updateRefreshToken(user.id, newRefreshToken);
+    const hashedNewRefreshToken =
+      await this.hashingService.hash(newRefreshToken);
+    await this.usersRepository.updateRefreshToken(
+      user.id,
+      hashedNewRefreshToken,
+    );
 
     return { accessToken, refreshToken: newRefreshToken };
   }

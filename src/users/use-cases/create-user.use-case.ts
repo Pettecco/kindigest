@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UseCase } from '../../common/interfaces/use-case.js';
 import { IUsersRepository } from '../domain/user-repository.js';
-import { IHashingService } from '../../auth/hashing/hashing.service.js';
+import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository.js';
+import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service.js';
+import type { IHashingService } from '../../auth/hashing/hashing.service.js';
 import { PreferredDisplayMode } from 'generated/prisma/enums.js';
 
 @Injectable()
@@ -11,8 +13,8 @@ export class CreateUserUseCase implements UseCase<
 > {
   constructor(
     @Inject(IUsersRepository)
-    private usersRepository: IUsersRepository,
-    @Inject(IHashingService)
+    private usersRepository: IUsersRepositoryType,
+    @Inject(IHashingServiceSymbol)
     private hashingService: IHashingService,
   ) {}
 

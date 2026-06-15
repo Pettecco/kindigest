@@ -2,6 +2,7 @@ import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { UseCase } from 'src/common/interfaces/use-case.js';
 import { CreateUserOutput } from './create-user.use-case.js';
 import { IUsersRepository } from '../domain/user-repository.js';
+import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository.js';
 import { FindUserByEmailDto } from '../dto/find-user-by-email.dto.js';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class FindUserByEmailUseCase implements UseCase<
 > {
   constructor(
     @Inject(IUsersRepository)
-    private readonly usersRepository: IUsersRepository,
+    private readonly usersRepository: IUsersRepositoryType,
   ) {}
 
   async execute({

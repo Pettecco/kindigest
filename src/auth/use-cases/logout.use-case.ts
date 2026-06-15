@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IUsersRepository } from '../../users/domain/user-repository.js';
+import type { IUsersRepository } from '../../users/domain/user-repository.js';
 
 @Injectable()
 export class LogoutUseCase {

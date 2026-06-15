@@ -4,13 +4,14 @@ import { ConfigService } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
 import { IHashingServiceSymbol } from '../hashing/hashing.service.js';
 import type { IHashingService } from '../hashing/hashing.service.js';
-import type { IUsersRepository } from '../../users/domain/user-repository.js';
+import { IUsersRepository } from '../../users/domain/user-repository.js';
 import { TokenDto } from '../dto/token.dto.js';
 
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
     private jwtService: JwtService,
+    @Inject(IUsersRepository)
     private usersRepository: IUsersRepository,
     private configService: ConfigService,
     @Inject(IHashingServiceSymbol)

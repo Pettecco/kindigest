@@ -5,6 +5,7 @@ import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-re
 import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service.js';
 import type { IHashingService } from '../../auth/hashing/hashing.service.js';
 import { PreferredDisplayMode } from 'generated/prisma/enums.js';
+import { ILogger } from '../../common/interfaces/logger.js';
 
 @Injectable()
 export class CreateUserUseCase implements UseCase<
@@ -16,18 +17,24 @@ export class CreateUserUseCase implements UseCase<
     private usersRepository: IUsersRepositoryType,
     @Inject(IHashingServiceSymbol)
     private hashingService: IHashingService,
+    @Inject(ILogger)
+    private logger: ILogger,
   ) {}
 
   async execute({
     email,
     password,
   }: CreateUserInput): Promise<CreateUserOutput> {
+    await this.logger.info(`Creating user: ${email}`);
+
     const passwordHash = await this.hashingService.hash(password);
 
     const user = await this.usersRepository.create({
       email,
       password: passwordHash,
     });
+
+    await this.logger.info(`User created successfully: ${email}`);
 
     return user;
   }

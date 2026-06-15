@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import type { IUsersRepository } from '../../users/domain/user-repository.js';
+import { Inject, Injectable } from '@nestjs/common';
+import { IUsersRepository } from '../../users/domain/user-repository.js';
 
 @Injectable()
 export class LogoutUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @Inject(IUsersRepository)
+    private usersRepository: IUsersRepository,
+  ) {}
 
   async execute(userId: string): Promise<void> {
     await this.usersRepository.updateRefreshToken(userId, null);

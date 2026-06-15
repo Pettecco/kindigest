@@ -9,6 +9,7 @@ import { UsersModule } from '../users/users.module.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { RefreshTokenGuard } from './guards/refresh-token.guard.js';
 import { makeHashingFactory } from '../common/factories/hashing.factory.js';
+import { makeLogger } from '../common/factories/logger.js';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { makeHashingFactory } from '../common/factories/hashing.factory.js';
   controllers: [AuthController],
   providers: [
     makeHashingFactory,
+    makeLogger('AuthModule'),
     LoginUseCase,
     RefreshTokenUseCase,
     LogoutUseCase,

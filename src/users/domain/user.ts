@@ -1,4 +1,4 @@
-import { PreferredDisplayMode } from '../../../generated/prisma/client.js';
+import { PreferredDisplayMode } from '../../../generated/prisma/client';
 
 export interface User {
   id: string;

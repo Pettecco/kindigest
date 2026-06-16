@@ -8,7 +8,7 @@ import {
   REQUEST_TOKEN_PAYLOAD_KEY,
   RefreshTokenPayloadWithToken,
   AccessTokenPayload,
-} from '../auth.constants.js';
+} from '../auth.constants';
 
 type AllPayloadKeys =
   | keyof AccessTokenPayload

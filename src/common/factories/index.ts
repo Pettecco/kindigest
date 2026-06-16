@@ -1,2 +1,2 @@
-export * from './hashing.factory.js';
-export * from './logger.js';
+export * from './hashing.factory';
+export * from './logger';

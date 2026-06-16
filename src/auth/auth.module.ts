@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { AuthController } from './auth.controller.js';
-import { LoginUseCase } from './use-cases/login.use-case.js';
-import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case.js';
-import { LogoutUseCase } from './use-cases/logout.use-case.js';
-import { UsersModule } from '../users/users.module.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
-import { RefreshTokenGuard } from './guards/refresh-token.guard.js';
-import { makeHashingFactory } from '../common/factories/hashing.factory.js';
-import { makeLogger } from '../common/factories/logger.js';
+import { AuthController } from './auth.controller';
+import { LoginUseCase } from './use-cases/login.use-case';
+import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case';
+import { LogoutUseCase } from './use-cases/logout.use-case';
+import { UsersModule } from '../users/users.module';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { makeHashingFactory } from '../common/factories/hashing.factory';
+import { makeLogger } from '../common/factories/logger';
 
 @Module({
   imports: [

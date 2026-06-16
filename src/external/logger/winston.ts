@@ -1,5 +1,5 @@
-import { ILogOptions } from '../../common/interfaces/log-options.js';
-import { ILogger } from '../../common/interfaces/logger.js';
+import { ILogOptions } from '../../common/interfaces/log-options';
+import { ILogger } from '../../common/interfaces/logger';
 import { createLogger, format, Logger, transports } from 'winston';
 import Transport from 'winston-transport';
 

@@ -1,5 +1,5 @@
-import { CreateUserDto } from '../dto/create-user.dto.js';
-import { User } from './user.js';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { User } from './user';
 
 export interface IUsersRepository {
   create(user: CreateUserDto): Promise<User>;

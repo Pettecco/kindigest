@@ -1,1 +1,1 @@
-export * from './winston.js';
+export * from './winston';

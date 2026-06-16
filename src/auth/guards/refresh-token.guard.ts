@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import type { Request } from 'express';
-import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants.js';
+import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {

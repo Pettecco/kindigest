@@ -2,10 +2,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
-import { IHashingServiceSymbol } from '../hashing/hashing.service.js';
-import type { IHashingService } from '../hashing/hashing.service.js';
-import { IUsersRepository } from '../../users/domain/user-repository.js';
-import { TokenDto } from '../dto/token.dto.js';
+import { IHashingServiceSymbol } from '../hashing/hashing.service';
+import type { IHashingService } from '../hashing/hashing.service';
+import { IUsersRepository } from '../../users/domain/user-repository';
+import { TokenDto } from '../dto/token.dto';
 
 @Injectable()
 export class RefreshTokenUseCase {

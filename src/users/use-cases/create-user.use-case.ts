@@ -1,11 +1,11 @@
 import { Inject, Injectable, ConflictException } from '@nestjs/common';
-import { UseCase } from '../../common/interfaces/use-case.js';
-import { IUsersRepository } from '../domain/user-repository.js';
-import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository.js';
-import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service.js';
-import type { IHashingService } from '../../auth/hashing/hashing.service.js';
-import { PreferredDisplayMode } from 'generated/prisma/enums.js';
-import { ILogger } from '../../common/interfaces/logger.js';
+import { UseCase } from '../../common/interfaces/use-case';
+import { IUsersRepository } from '../domain/user-repository';
+import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository';
+import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service';
+import type { IHashingService } from '../../auth/hashing/hashing.service';
+import { PreferredDisplayMode } from 'generated/prisma/enums';
+import { ILogger } from '../../common/interfaces/logger';
 
 @Injectable()
 export class CreateUserUseCase implements UseCase<

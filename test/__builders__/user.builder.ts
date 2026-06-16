@@ -6,7 +6,8 @@ export class UserBuilder {
   private email: string = 'test@example.com';
   private passwordHash: string = 'hashedPassword123';
   private hashedRefreshToken: string | null = null;
-  private preferredDisplayMode: PreferredDisplayMode = PreferredDisplayMode.TRANSLATED;
+  private preferredDisplayMode: PreferredDisplayMode =
+    PreferredDisplayMode.TRANSLATED;
   private createdAt: Date = new Date('2024-01-01');
 
   withId(id: string): UserBuilder {

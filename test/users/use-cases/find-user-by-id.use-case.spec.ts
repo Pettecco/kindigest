@@ -1,4 +1,7 @@
-import { FindUserByIdUseCase, FindUserByIdInput } from '../../../src/users/use-cases/find-user-by-id.use-case';
+import {
+  FindUserByIdUseCase,
+  FindUserByIdInput,
+} from '../../../src/users/use-cases/find-user-by-id.use-case';
 import { MockUserRepository } from '../../__mocks__/user-repository.mock';
 import { UserBuilder } from '../../__builders__/user.builder';
 import { NotFoundException } from '@nestjs/common';
@@ -63,7 +66,7 @@ describe('FindUserByIdUseCase', () => {
       await useCase.execute(input);
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException);
-      expect(error.getStatus()).toBe(404);
+      expect((error as NotFoundException).getStatus()).toBe(404);
     }
   });
 

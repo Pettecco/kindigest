@@ -1,4 +1,7 @@
-import { CreateUserUseCase, CreateUserInput } from '../../../src/users/use-cases/create-user.use-case';
+import {
+  CreateUserUseCase,
+  CreateUserInput,
+} from '../../../src/users/use-cases/create-user.use-case';
 import { MockUserRepository } from '../../__mocks__/user-repository.mock';
 import { MockHashingService } from '../../__mocks__/hashing-service.mock';
 import { MockLogger } from '../../__mocks__/logger.mock';
@@ -49,7 +52,9 @@ describe('CreateUserUseCase', () => {
 
     await useCase.execute(input);
 
-    await expect(useCase.execute(input)).rejects.toThrow('Email already in use');
+    await expect(useCase.execute(input)).rejects.toThrow(
+      'Email already in use',
+    );
     await expect(useCase.execute(input)).rejects.toMatchObject({
       status: 409,
       name: 'ConflictException',

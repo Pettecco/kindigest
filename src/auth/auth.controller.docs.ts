@@ -3,43 +3,73 @@ import { docs } from 'nestjs-docfy';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthController } from './auth.controller';
 import { TokenDto } from './dto/token.dto';
+import { LoginDto } from './dto/login.dto';
 
 docs(AuthController, {
   classDecorators: [
-    ApiTags('auth'),
+    ApiTags('Authentication'),
   ],
   methods: {
-  // POST /login → async login(dto: LoginDto): Promise<TokenDto>
-  login: [
-    ApiOperation({ summary: 'Login' }),
-    ApiBody({ schema: {
-        type: 'object',
-        properties: {
-          email: {
-            type: 'string',
-            format: 'email',
-          },
-          password: {
-            type: 'string',
-            minLength: 6,
-          },
+    login: [
+      ApiOperation({ 
+        summary: 'User login',
+        description: 'Authenticates a user with email and password, returns access and refresh tokens',
+      }),
+      ApiBody({ type: LoginDto }),
+      ApiResponse({ 
+        status: 201, 
+        description: 'Successfully logged in', 
+        type: TokenDto,
+        example: {
+          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
+          refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
         },
-        required: ['email', 'password'],
-      } }),
-    ApiResponse({ status: 201, description: 'Created', type: TokenDto }),
-    ApiResponse({ status: 400, description: 'Bad Request' }),
-  ],
+      }),
+      ApiResponse({ 
+        status: 401, 
+        description: 'Invalid credentials',
+        example: { message: 'Invalid credentials', statusCode: 401 },
+      }),
+      ApiResponse({ 
+        status: 400, 
+        description: 'Bad request - validation error',
+      }),
+    ],
 
-  // POST /refresh → async refresh(userId: string, refreshToken: string): Promise<TokenDto>
-  refresh: [
-    ApiOperation({ summary: 'Refresh' }),
-    ApiResponse({ status: 201, description: 'Created', type: TokenDto }),
-  ],
+    refresh: [
+      ApiOperation({ 
+        summary: 'Refresh access token',
+        description: 'Generates a new access token using a valid refresh token',
+      }),
+      ApiResponse({ 
+        status: 201, 
+        description: 'Token refreshed successfully', 
+        type: TokenDto,
+        example: {
+          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
+          refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
+        },
+      }),
+      ApiResponse({ 
+        status: 401, 
+        description: 'Invalid or expired refresh token',
+      }),
+    ],
 
-  // POST /logout → async logout(userId: string): Promise<{ message: string; }>
-  logout: [
-    ApiOperation({ summary: 'Logout' }),
-    ApiResponse({ status: 201, description: 'Created' }),
-  ],
+    logout: [
+      ApiOperation({ 
+        summary: 'User logout',
+        description: 'Invalidates the current refresh token',
+      }),
+      ApiResponse({ 
+        status: 201, 
+        description: 'Successfully logged out',
+        example: { message: 'Logout successful' },
+      }),
+      ApiResponse({ 
+        status: 401, 
+        description: 'Unauthorized - invalid token',
+      }),
+    ],
   },
 });

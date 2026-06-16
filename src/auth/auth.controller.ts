@@ -1,11 +1,11 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { WithDocs } from 'nestjs-docfy';
-import { LoginDto } from './dto/login.dto.js';
-import { LoginUseCase } from './use-cases/login.use-case.js';
-import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case.js';
-import { LogoutUseCase } from './use-cases/logout.use-case.js';
-import { RefreshTokenGuard } from './guards/refresh-token.guard.js';
-import { TokenPayloadParam } from './decorators/token-payload.decorator.js';
+import { LoginDto } from './dto/login.dto';
+import { LoginUseCase } from './use-cases/login.use-case';
+import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case';
+import { LogoutUseCase } from './use-cases/logout.use-case';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { TokenPayloadParam } from './decorators/token-payload.decorator';
 
 @WithDocs()
 @Controller('auth')

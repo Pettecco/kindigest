@@ -7,12 +7,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { WithDocs } from 'nestjs-docfy';
-import { CreateUserDto, FindUserByEmailDto } from './dto/index.js';
+import { CreateUserDto, FindUserByEmailDto } from './dto/index';
 import {
   CreateUserUseCase,
   FindUserByEmailUseCase,
   FindUserByIdUseCase,
-} from './use-cases/index.js';
+} from './use-cases/index';
 
 @WithDocs()
 @Controller('users')

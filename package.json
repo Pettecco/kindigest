@@ -5,20 +5,22 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"tests/**/*.ts\"",
     "start": "nest start --watch",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node --import tsconfig-paths/register dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "lint": "eslint \"{src,apps,libs,test,tests}/**/*.ts\" --fix",
+    "test": "jest --config tests/jest-unit.json",
+    "test:watch": "jest --config tests/jest-unit.json --watch",
+    "test:cov": "jest --config tests/jest-unit.json --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config tests/jest-unit.json --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:unit": "jest --config tests/jest-unit.json",
+    "test:unit:watch": "jest --config tests/jest-unit.json --watch",
+    "test:unit:cov": "jest --config tests/jest-unit.json --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

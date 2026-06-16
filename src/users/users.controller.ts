@@ -28,7 +28,7 @@ export class UsersController {
 
   @Get(':id')
   async findUserById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.findUserByIdUseCase.execute(id);
+    return this.findUserByIdUseCase.execute({ id });
   }
 
   @Post('email')

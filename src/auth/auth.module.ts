@@ -17,11 +17,11 @@ import { makeLogger } from '../common/factories/logger.js';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('jwt.secret'),
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<number>('jwt.jwtTtl'),
-          audience: configService.get<string>('jwt.audience'),
-          issuer: configService.get<string>('jwt.issuer'),
+          expiresIn: configService.get<number>('JWT_TTL'),
+          audience: configService.get<string>('JWT_TOKEN_AUDIENCE'),
+          issuer: configService.get<string>('JWT_TOKEN_ISSUER'),
         },
       }),
     }),

@@ -29,11 +29,11 @@ export class RefreshTokenUseCase {
       throw new UnauthorizedException('Refresh token not found');
     }
 
-    const audience = this.configService.get<string>('jwt.audience');
-    const issuer = this.configService.get<string>('jwt.issuer');
-    const secret = this.configService.get<string>('jwt.secret');
-    const ttl = this.configService.get<number>('jwt.jwtTtl');
-    const refreshTtl = this.configService.get<number>('jwt.jwtRefreshTtl');
+    const audience = this.configService.get<string>('JWT_TOKEN_AUDIENCE');
+    const issuer = this.configService.get<string>('JWT_TOKEN_ISSUER');
+    const secret = this.configService.get<string>('JWT_SECRET');
+    const ttl = this.configService.get<number>('JWT_TTL');
+    const refreshTtl = this.configService.get<number>('JWT_REFRESH_TTL');
 
     await this.jwtService.verifyAsync(refreshToken, {
       secret,

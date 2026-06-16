@@ -27,7 +27,7 @@ export class LoginUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('User not authorized');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await this.hashingService.compare(
@@ -36,14 +36,14 @@ export class LoginUseCase {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    const audience = this.configService.get<string>('jwt.audience');
-    const issuer = this.configService.get<string>('jwt.issuer');
-    const secret = this.configService.get<string>('jwt.secret');
-    const ttl = this.configService.get<number>('jwt.jwtTtl');
-    const refreshTtl = this.configService.get<number>('jwt.jwtRefreshTtl');
+    const audience = this.configService.get<string>('JWT_TOKEN_AUDIENCE');
+    const issuer = this.configService.get<string>('JWT_TOKEN_ISSUER');
+    const secret = this.configService.get<string>('JWT_SECRET');
+    const ttl = this.configService.get<number>('JWT_TTL');
+    const refreshTtl = this.configService.get<number>('JWT_REFRESH_TTL');
 
     const accessToken = await this.jwtService.signAsync(
       { sub: user.id },

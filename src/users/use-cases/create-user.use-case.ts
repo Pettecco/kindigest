@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { UseCase } from '../../common/interfaces/use-case.js';
 import { IUsersRepository } from '../domain/user-repository.js';
 import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository.js';
@@ -26,6 +26,12 @@ export class CreateUserUseCase implements UseCase<
     password,
   }: CreateUserInput): Promise<CreateUserOutput> {
     await this.logger.info(`Creating user: ${email}`);
+
+    const existingUser = await this.usersRepository.findByEmail(email);
+
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
+    }
 
     const passwordHash = await this.hashingService.hash(password);
 

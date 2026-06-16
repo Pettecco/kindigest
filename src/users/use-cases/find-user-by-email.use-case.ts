@@ -1,9 +1,9 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { UseCase } from 'src/common/interfaces/use-case.js';
-import { CreateUserOutput } from './create-user.use-case.js';
 import { IUsersRepository } from '../domain/user-repository.js';
 import type { IUsersRepository as IUsersRepositoryType } from '../domain/user-repository.js';
 import { FindUserByEmailDto } from '../dto/find-user-by-email.dto.js';
+import { User } from '../domain/user.js';
 
 @Injectable()
 export class FindUserByEmailUseCase implements UseCase<
@@ -21,12 +21,24 @@ export class FindUserByEmailUseCase implements UseCase<
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new NotFoundException('User not found');
     }
 
-    return user;
+    return this.toOutputDto(user);
+  }
+
+  private toOutputDto(user: User): FindUserByEmailOutput {
+    const { passwordHash, hashedRefreshToken, ...output } = user;
+    return output;
   }
 }
 
 export class FindUserByEmailInput extends FindUserByEmailDto {}
-export class FindUserByEmailOutput extends CreateUserOutput {}
+export class FindUserByEmailOutput {
+  id: string;
+  email: string;
+  passwordHash?: string;
+  hashedRefreshToken?: string;
+  preferredDisplayMode: string;
+  createdAt: Date;
+}

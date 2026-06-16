@@ -1,57 +1,8 @@
 import { CreateUserUseCase, CreateUserInput } from '../../../src/users/use-cases/create-user.use-case';
-import { IUsersRepository } from '../../../src/users/domain/user-repository';
-import { IHashingService, IHashingServiceSymbol } from '../../../src/auth/hashing/hashing.service';
+import { MockUserRepository } from '../../__mocks__/user-repository.mock';
+import { MockHashingService } from '../../__mocks__/hashing-service.mock';
+import { MockLogger } from '../../__mocks__/logger.mock';
 import { PreferredDisplayMode } from '../../../generated/prisma/enums';
-import { ILogger } from '../../../src/common/interfaces/logger';
-
-class MockUserRepository implements IUsersRepository {
-  private users: any[] = [];
-
-  async create(userData: { email: string; password: string }): Promise<any> {
-    if (this.users.find((u) => u.email === userData.email)) {
-      throw new Error('Email already in use');
-    }
-    const user = {
-      id: 'user-id-123',
-      email: userData.email,
-      passwordHash: userData.password,
-      hashedRefreshToken: null,
-      preferredDisplayMode: PreferredDisplayMode.TRANSLATED,
-      createdAt: new Date(),
-    };
-    this.users.push(user);
-    return user;
-  }
-
-  async findById(id: string): Promise<any | null> {
-    return this.users.find((u) => u.id === id) || null;
-  }
-
-  async findByEmail(email: string): Promise<any | null> {
-    return this.users.find((u) => u.email === email) || null;
-  }
-
-  async updateRefreshToken(id: string, token: string | null): Promise<void> {
-    // Mock implementation
-  }
-}
-
-class MockHashingService implements IHashingService {
-  async hash(password: string): Promise<string> {
-    return `hashed_${password}`;
-  }
-
-  async compare(password: string, hash: string): Promise<boolean> {
-    return `hashed_${password}` === hash;
-  }
-}
-
-class MockLogger implements ILogger {
-  async info(message: string): Promise<void> {}
-  async warn(message: string): Promise<void> {}
-  async error(message: string): Promise<void> {}
-  async debug(message: string): Promise<void> {}
-}
 
 describe('CreateUserUseCase', () => {
   let useCase: CreateUserUseCase;
@@ -123,5 +74,28 @@ describe('CreateUserUseCase', () => {
       email: input.email,
       password: 'hashed_SecurePass123',
     });
+  });
+
+  it('should create user with correct password hash', async () => {
+    const input: CreateUserInput = {
+      email: 'test@example.com',
+      password: 'SecurePass123',
+    };
+
+    await useCase.execute(input);
+
+    const user = await userRepository.findByEmail(input.email);
+    expect(user?.passwordHash).toBe('hashed_SecurePass123');
+  });
+
+  it('should create user with default display mode TRANSLATED', async () => {
+    const input: CreateUserInput = {
+      email: 'test@example.com',
+      password: 'SecurePass123',
+    };
+
+    const result = await useCase.execute(input);
+
+    expect(result.preferredDisplayMode).toBe(PreferredDisplayMode.TRANSLATED);
   });
 });

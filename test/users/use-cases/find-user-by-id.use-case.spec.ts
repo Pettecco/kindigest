@@ -1,36 +1,8 @@
 import { FindUserByIdUseCase, FindUserByIdInput } from '../../../src/users/use-cases/find-user-by-id.use-case';
-import { IUsersRepository } from '../../../src/users/domain/user-repository';
+import { MockUserRepository } from '../../__mocks__/user-repository.mock';
+import { UserBuilder } from '../../__builders__/user.builder';
 import { NotFoundException } from '@nestjs/common';
 import { PreferredDisplayMode } from '../../../generated/prisma/enums';
-
-class MockUserRepository implements IUsersRepository {
-  private users: any[] = [
-    {
-      id: 'valid-id-123',
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-      hashedRefreshToken: 'refreshToken123',
-      preferredDisplayMode: PreferredDisplayMode.TRANSLATED,
-      createdAt: new Date('2024-01-01'),
-    },
-  ];
-
-  async create(userData: { email: string; password: string }): Promise<any> {
-    throw new Error('Not implemented');
-  }
-
-  async findById(id: string): Promise<any | null> {
-    return this.users.find((u) => u.id === id) || null;
-  }
-
-  async findByEmail(email: string): Promise<any | null> {
-    return this.users.find((u) => u.email === email) || null;
-  }
-
-  async updateRefreshToken(id: string, token: string | null): Promise<void> {
-    // Mock implementation
-  }
-}
 
 describe('FindUserByIdUseCase', () => {
   let useCase: FindUserByIdUseCase;
@@ -42,6 +14,13 @@ describe('FindUserByIdUseCase', () => {
   });
 
   it('should find user by id successfully', async () => {
+    const existingUser = UserBuilder.create()
+      .withId('valid-id-123')
+      .withEmail('test@example.com')
+      .build();
+
+    userRepository.addUser(existingUser);
+
     const input: FindUserByIdInput = { id: 'valid-id-123' };
 
     const result = await useCase.execute(input);
@@ -53,6 +32,15 @@ describe('FindUserByIdUseCase', () => {
   });
 
   it('should exclude sensitive fields from output', async () => {
+    const existingUser = UserBuilder.create()
+      .withId('valid-id-123')
+      .withEmail('test@example.com')
+      .withPasswordHash('sensitiveHash123')
+      .withRefreshToken('sensitiveToken123')
+      .build();
+
+    userRepository.addUser(existingUser);
+
     const input: FindUserByIdInput = { id: 'valid-id-123' };
 
     const result = await useCase.execute(input);
@@ -77,5 +65,38 @@ describe('FindUserByIdUseCase', () => {
       expect(error).toBeInstanceOf(NotFoundException);
       expect(error.getStatus()).toBe(404);
     }
+  });
+
+  it('should return user with IMMERSIVE display mode', async () => {
+    const existingUser = UserBuilder.create()
+      .withId('immersive-user-id')
+      .withEmail('immersive@example.com')
+      .withDisplayMode(PreferredDisplayMode.IMMERSIVE)
+      .build();
+
+    userRepository.addUser(existingUser);
+
+    const input: FindUserByIdInput = { id: 'immersive-user-id' };
+
+    const result = await useCase.execute(input);
+
+    expect(result.preferredDisplayMode).toBe(PreferredDisplayMode.IMMERSIVE);
+  });
+
+  it('should return user with custom refresh token', async () => {
+    const existingUser = UserBuilder.create()
+      .withId('user-with-token')
+      .withEmail('user@example.com')
+      .withRefreshToken('myRefreshToken123')
+      .build();
+
+    userRepository.addUser(existingUser);
+
+    const input: FindUserByIdInput = { id: 'user-with-token' };
+
+    const result = await useCase.execute(input);
+
+    expect(result.id).toBe('user-with-token');
+    expect(result.email).toBe('user@example.com');
   });
 });

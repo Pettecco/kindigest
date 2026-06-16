@@ -1,12 +1,12 @@
 import { UserFactory } from '../../../src/users/domain/user.factory';
 import { PreferredDisplayMode } from '../../../generated/prisma/enums';
+import { UserBuilder } from '../../__builders__/user.builder';
 
 describe('UserFactory', () => {
   it('should create a valid user', () => {
     const user = UserFactory.create({
       email: 'test@example.com',
       passwordHash: 'hashedPassword123',
-      preferredDisplayMode: PreferredDisplayMode.TRANSLATED,
     });
 
     expect(user.email).toBe('test@example.com');
@@ -56,5 +56,16 @@ describe('UserFactory', () => {
     });
 
     expect(user.createdAt).toBe(customDate);
+  });
+
+  it('should create user using builder pattern', () => {
+    const user = UserBuilder.create()
+      .withEmail('builder@example.com')
+      .withPasswordHash('hashed123')
+      .withDisplayMode(PreferredDisplayMode.IMMERSIVE)
+      .build();
+
+    expect(user.email).toBe('builder@example.com');
+    expect(user.preferredDisplayMode).toBe(PreferredDisplayMode.IMMERSIVE);
   });
 });

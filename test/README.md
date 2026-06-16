@@ -5,12 +5,17 @@ Unit and integration tests for Kindigest.
 ## Structure
 
 ```
-tests/
+test/
 ├── jest-unit.json          # Jest config for unit tests
 ├── README.md               # This file
+├── __builders__/           # Test data builders
+│   └── user.builder.ts
+├── __mocks__/              # Shared mock implementations
+│   ├── user-repository.mock.ts
+│   ├── hashing-service.mock.ts
+│   └── logger.mock.ts
 ├── auth/                   # Auth module tests
-│   ├── hashing/
-│   └── use-cases/
+│   └── hashing/
 └── users/                  # Users module tests
     ├── domain/
     └── use-cases/
@@ -22,32 +27,52 @@ tests/
 
 ```bash
 # Run all unit tests
-npm run test:unit
+yarn test:unit
 
 # Run with coverage
-npm run test:unit:cov
+yarn test:unit:cov
 
 # Run specific test file
-npm run test:unit -- users/domain/user.spec.ts
+yarn test:unit -- users/domain/user.spec.ts
 
 # Run in watch mode
-npm run test:unit:watch
+yarn test:unit:watch
 ```
 
 ### E2E Tests
 
 ```bash
 # Run all e2e tests
-npm run test:e2e
+yarn test:e2e
 ```
 
 ## Writing Tests
+
+### Using Test Builders
+
+```typescript
+import { UserBuilder } from '../../__builders__/user.builder';
+import { PreferredDisplayMode } from '../../generated/prisma/enums';
+
+const user = UserBuilder.create()
+  .withEmail('test@example.com')
+  .withDisplayMode(PreferredDisplayMode.IMMERSIVE)
+  .build();
+```
+
+### Using Mock Repositories
+
+```typescript
+import { MockUserRepository } from '../../__mocks__/user-repository.mock';
+
+const userRepository = new MockUserRepository();
+const useCase = new CreateUserUseCase(userRepository, hashingService);
+```
 
 ### Unit Test Example
 
 ```typescript
 import { UserFactory } from '../../src/users/domain/user.factory';
-import { PreferredDisplayMode } from '../../generated/prisma/client';
 
 describe('UserFactory', () => {
   it('should create a valid user', () => {
@@ -57,7 +82,6 @@ describe('UserFactory', () => {
     });
 
     expect(user.email).toBe('test@example.com');
-    expect(user.preferredDisplayMode).toBe(PreferredDisplayMode.TRANSLATED);
   });
 });
 ```
@@ -65,16 +89,12 @@ describe('UserFactory', () => {
 ### Use Case Test Example
 
 ```typescript
-import { CreateUserUseCase } from '../../src/users/use-cases/create-user.use-case';
-
 describe('CreateUserUseCase', () => {
   let useCase: CreateUserUseCase;
   let userRepository: MockUserRepository;
-  let hashingService: MockHashingService;
 
   beforeEach(() => {
     userRepository = new MockUserRepository();
-    hashingService = new MockHashingService();
     useCase = new CreateUserUseCase(userRepository, hashingService);
   });
 

@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
+import { WithDocs } from 'nestjs-docfy';
 import { CreateUserDto, FindUserByEmailDto } from './dto/index.js';
 import {
   CreateUserUseCase,
@@ -13,6 +14,7 @@ import {
   FindUserByIdUseCase,
 } from './use-cases/index.js';
 
+@WithDocs()
 @Controller('users')
 export class UsersController {
   constructor(

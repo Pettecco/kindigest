@@ -39,11 +39,13 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.findUserByIdUseCase.execute({ id });
   }
 
   @Post('email')
+  @UseGuards(JwtAuthGuard)
   async findUserByEmail(@Body() dto: FindUserByEmailDto) {
     return this.findUserByEmailUseCase.execute(dto);
   }

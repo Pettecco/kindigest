@@ -4,7 +4,7 @@ import { UserBuilder } from '../../__builders__/user.builder';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IHashingServiceSymbol, IHashingService } from '../../../src/auth/hashing/hashing.service';
+import { IHashingService } from '../../../src/auth/hashing/hashing.service';
 
 describe('LoginUseCase', () => {
   let useCase: LoginUseCase;
@@ -70,14 +70,18 @@ describe('LoginUseCase', () => {
       };
       return config[key];
     });
-    mockJwtService.signAsync.mockImplementation(async () => 'mocked-token');
+    mockJwtService.signAsync.mockImplementation(
+      async () => await 'mocked-token',
+    );
     mockHashingService.hash.mockResolvedValue('hashedRefreshToken');
 
     const result = await useCase.execute('test@example.com', 'password123');
 
     expect(result).toHaveProperty('accessToken');
     expect(result).toHaveProperty('refreshToken');
-    expect(mockLogger.info).toHaveBeenCalledWith('Login successful: test@example.com');
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      'Login successful: test@example.com',
+    );
     const updatedUser = await userRepository.findById('user-123');
     expect(updatedUser?.hashedRefreshToken).toBe('hashedRefreshToken');
   });
@@ -134,7 +138,9 @@ describe('LoginUseCase', () => {
       };
       return config[key];
     });
-    mockJwtService.signAsync.mockImplementation(async () => 'mocked-token');
+    mockJwtService.signAsync.mockImplementation(
+      async () => await 'mocked-token',
+    );
     mockHashingService.hash.mockResolvedValue('hashedRefreshToken');
 
     await useCase.execute('test@example.com', 'password123');
@@ -165,7 +171,9 @@ describe('LoginUseCase', () => {
       };
       return config[key];
     });
-    mockJwtService.signAsync.mockImplementation(async () => 'mocked-token');
+    mockJwtService.signAsync.mockImplementation(
+      async () => await 'mocked-token',
+    );
     mockHashingService.hash.mockResolvedValue('hashedRefreshToken');
 
     await useCase.execute('test@example.com', 'password123');

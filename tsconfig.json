@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -12,7 +12,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": [
+        "src/*"
+      ]
     },
     "incremental": true,
     "skipLibCheck": true,
@@ -25,6 +27,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": false,
-    "types": ["jest"]
+    "types": [
+      "jest"
+    ]
   }
 }

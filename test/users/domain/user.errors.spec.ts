@@ -1,5 +1,4 @@
 import { UserFactory } from '../../../src/users/domain/user.factory';
-import { PreferredDisplayMode } from '../../../generated/prisma/enums';
 
 describe('UserFactory - Validation Errors', () => {
   it('should throw error for invalid email', () => {

@@ -35,19 +35,19 @@ export class WinstonLogger implements ILogger {
     });
   }
 
-  async debug(message: any): Promise<void> {
+  debug(message: any): void {
     this.logger.debug({ message });
   }
 
-  async error(message: any): Promise<void> {
+  error(message: any): void {
     this.logger.error({ message });
   }
 
-  async info(message: any): Promise<void> {
+  info(message: any): void {
     this.logger.info({ message });
   }
 
-  async warn(message: any): Promise<void> {
+  warn(message: any): void {
     this.logger.warn({ message });
   }
 }

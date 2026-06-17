@@ -17,20 +17,20 @@ export class MockUserRepository implements IUsersRepository {
       preferredDisplayMode: 'TRANSLATED' as any,
       createdAt: new Date(),
     };
-    this.users.push(user);
+    await this.users.push(user);
     return user;
   }
 
   async findById(id: string): Promise<User | null> {
-    return this.users.find(u => u.id === id) || null;
+    return (await this.users.find(u => u.id === id)) || null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.users.find(u => u.email === email) || null;
+    return (await this.users.find(u => u.email === email)) || null;
   }
 
   async updateRefreshToken(id: string, token: string | null): Promise<void> {
-    const user = this.users.find(u => u.id === id);
+    const user = await this.users.find(u => u.id === id);
     if (user) {
       user.hashedRefreshToken = token;
     }

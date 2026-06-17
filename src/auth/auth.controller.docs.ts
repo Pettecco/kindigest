@@ -6,68 +6,71 @@ import { TokenDto } from './dto/token.dto';
 import { LoginDto } from './dto/login.dto';
 
 docs(AuthController, {
-  classDecorators: [
-    ApiTags('Authentication'),
-  ],
+  classDecorators: [ApiTags('Authentication')],
   methods: {
     login: [
-      ApiOperation({ 
+      ApiOperation({
         summary: 'User login',
-        description: 'Authenticates a user with email and password, returns access and refresh tokens',
+        description:
+          'Authenticates a user with email and password, returns access and refresh tokens',
       }),
       ApiBody({ type: LoginDto }),
-      ApiResponse({ 
-        status: 201, 
-        description: 'Successfully logged in', 
+      ApiResponse({
+        status: 201,
+        description: 'Successfully logged in',
         type: TokenDto,
         example: {
-          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
-          refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
+          accessToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
+          refreshToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
         },
       }),
-      ApiResponse({ 
-        status: 401, 
+      ApiResponse({
+        status: 401,
         description: 'Invalid credentials',
         example: { message: 'Invalid credentials', statusCode: 401 },
       }),
-      ApiResponse({ 
-        status: 400, 
+      ApiResponse({
+        status: 400,
         description: 'Bad request - validation error',
       }),
     ],
 
     refresh: [
-      ApiOperation({ 
+      ApiOperation({
         summary: 'Refresh access token',
         description: 'Generates a new access token using a valid refresh token',
       }),
-      ApiResponse({ 
-        status: 201, 
-        description: 'Token refreshed successfully', 
+      ApiResponse({
+        status: 201,
+        description: 'Token refreshed successfully',
         type: TokenDto,
         example: {
-          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
-          refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
+          accessToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTg1NDY3MDAsImV4cCI6MTcxODU1MDMwMH0.abc123',
+          refreshToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYjBjNjUwMS1lNzkzLTRiYjYtYWIyMC01NDkzNzEyNzYxODciLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxODU0NjcwMCwiZXhwIjoxNzE5MTUxNTAwfQ.xyz789',
         },
       }),
-      ApiResponse({ 
-        status: 401, 
+      ApiResponse({
+        status: 401,
         description: 'Invalid or expired refresh token',
       }),
     ],
 
     logout: [
-      ApiOperation({ 
+      ApiOperation({
         summary: 'User logout',
         description: 'Invalidates the current refresh token',
       }),
-      ApiResponse({ 
-        status: 201, 
+      ApiResponse({
+        status: 201,
         description: 'Successfully logged out',
         example: { message: 'Logout successful' },
       }),
-      ApiResponse({ 
-        status: 401, 
+      ApiResponse({
+        status: 401,
         description: 'Unauthorized - invalid token',
       }),
     ],

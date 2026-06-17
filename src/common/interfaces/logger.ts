@@ -1,8 +1,8 @@
 export interface ILogger {
-  debug(message: string): Promise<void>;
-  error(message: string): Promise<void>;
-  info(message: string): Promise<void>;
-  warn(message: string): Promise<void>;
+  debug(message: string): void;
+  error(message: string): void;
+  info(message: string): void;
+  warn(message: string): void;
 }
 
 export const ILogger = Symbol('ILogger');

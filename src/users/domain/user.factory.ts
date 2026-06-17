@@ -22,7 +22,8 @@ export class UserFactory {
       email: props.email,
       passwordHash: props.passwordHash,
       hashedRefreshToken: props.hashedRefreshToken ?? null,
-      preferredDisplayMode: props.preferredDisplayMode ?? PreferredDisplayMode.TRANSLATED,
+      preferredDisplayMode:
+        props.preferredDisplayMode ?? PreferredDisplayMode.TRANSLATED,
       createdAt: props.createdAt ?? new Date(),
     };
   }

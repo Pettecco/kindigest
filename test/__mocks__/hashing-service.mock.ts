@@ -9,10 +9,10 @@ export class MockHashingService implements IHashingService {
   }
 
   async hash(password: string): Promise<string> {
-    return `${this.hashPrefix}${password}`;
+    return await `${this.hashPrefix}${password}`;
   }
 
   async compare(password: string, hash: string): Promise<boolean> {
-    return `${this.hashPrefix}${password}` === hash;
+    return (await `${this.hashPrefix}${password}`) === hash;
   }
 }

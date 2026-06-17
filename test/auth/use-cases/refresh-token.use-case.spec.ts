@@ -4,7 +4,7 @@ import { UserBuilder } from '../../__builders__/user.builder';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IHashingServiceSymbol, IHashingService } from '../../../src/auth/hashing/hashing.service';
+import { IHashingService } from '../../../src/auth/hashing/hashing.service';
 
 describe('RefreshTokenUseCase', () => {
   let useCase: RefreshTokenUseCase;
@@ -65,7 +65,7 @@ describe('RefreshTokenUseCase', () => {
 
     mockJwtService.verifyAsync.mockResolvedValue({} as any);
     mockHashingService.compare.mockResolvedValue(true);
-    mockJwtService.signAsync.mockImplementation(async () => 'new-token');
+    mockJwtService.signAsync.mockImplementation(async () => await 'new-token');
     mockHashingService.hash.mockResolvedValue('newHashedRefreshToken');
 
     const result = await useCase.execute('user-123', 'validRefreshToken');
@@ -100,13 +100,13 @@ describe('RefreshTokenUseCase', () => {
 
     userRepository.addUser(user);
 
-    await expect(
-      useCase.execute('user-123', 'refreshToken'),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(useCase.execute('user-123', 'refreshToken')).rejects.toThrow(
+      UnauthorizedException,
+    );
 
-    await expect(
-      useCase.execute('user-123', 'refreshToken'),
-    ).rejects.toThrow('Refresh token not found');
+    await expect(useCase.execute('user-123', 'refreshToken')).rejects.toThrow(
+      'Refresh token not found',
+    );
   });
 
   it('should throw UnauthorizedException when jwt verification fails', async () => {
@@ -181,7 +181,7 @@ describe('RefreshTokenUseCase', () => {
 
     mockJwtService.verifyAsync.mockResolvedValue({} as any);
     mockHashingService.compare.mockResolvedValue(true);
-    mockJwtService.signAsync.mockImplementation(async () => 'new-token');
+    mockJwtService.signAsync.mockImplementation(async () => await 'new-token');
     mockHashingService.hash.mockResolvedValue('newHashedRefreshToken');
 
     await useCase.execute('user-123', 'validRefreshToken');

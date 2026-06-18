@@ -5,7 +5,7 @@ CREATE TABLE "Vocabulary" (
     "importId" UUID NOT NULL,
     "bookId" UUID NOT NULL,
     "wordId" UUID NOT NULL,
-    "context" TEXT,
+    "context" VARCHAR(2000),
     "learnCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

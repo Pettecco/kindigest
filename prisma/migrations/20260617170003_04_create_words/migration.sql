@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE "Words" (
     "id" UUID NOT NULL,
-    "word" TEXT NOT NULL,
-    "stem" TEXT,
-    "language" "Language" NOT NULL DEFAULT 'EN',
-    "translatedWord" TEXT,
+    "word" VARCHAR(100) NOT NULL,
+    "stem" VARCHAR(100),
+    "language" "Language" NOT NULL DEFAULT 'PT',
+    "translatedWord" VARCHAR(255),
 
     CONSTRAINT "Words_pkey" PRIMARY KEY ("id")
 );

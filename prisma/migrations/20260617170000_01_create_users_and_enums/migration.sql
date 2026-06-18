@@ -7,9 +7,9 @@ CREATE TYPE "Language" AS ENUM ('EN', 'PT', 'ES', 'FR');
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,
-    "email" TEXT NOT NULL,
-    "passwordHash" TEXT NOT NULL,
-    "hashedRefreshToken" TEXT,
+    "email" VARCHAR(255) NOT NULL,
+    "passwordHash" VARCHAR(255) NOT NULL,
+    "hashedRefreshToken" VARCHAR(255),
     "preferredDisplayMode" "PreferredDisplayMode" NOT NULL DEFAULT 'TRANSLATED',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

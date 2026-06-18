@@ -10,9 +10,9 @@ datasource db {
 
 model User {
   id                   String               @id @default(uuid()) @db.Uuid
-  email                String               @unique
-  passwordHash         String
-  hashedRefreshToken   String?
+  email                String               @unique @db.VarChar(255)
+  passwordHash         String               @db.VarChar(255)
+  hashedRefreshToken   String?              @db.VarChar(255)
   preferredDisplayMode PreferredDisplayMode @default(TRANSLATED)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
@@ -30,18 +30,18 @@ model Imports {
 
 model Books {
   id           String       @id @default(uuid()) @db.Uuid
-  kindleBookId String       @unique
-  title        String
-  author       String?
+  kindleBookId String       @unique @db.VarChar(100)
+  title        String       @db.VarChar(255)
+  author       String?      @db.VarChar(255)
   vocabulary   Vocabulary[]
 }
 
 model Words {
   id             String       @id @default(uuid()) @db.Uuid
-  word           String
-  stem           String?
-  language       Language     @default(EN)
-  translatedWord String?
+  word           String       @db.VarChar(100)
+  stem           String?      @db.VarChar(100)
+  language       Language     @default(PT)
+  translatedWord String?      @db.VarChar(255)
   vocabulary     Vocabulary[]
 
   @@unique([word, language])
@@ -53,7 +53,7 @@ model Vocabulary {
   importId   String   @db.Uuid
   bookId     String   @db.Uuid
   wordId     String   @db.Uuid
-  context    String?
+  context    String?      @db.VarChar(2000)
   learnCount Int      @default(0)
   createdAt  DateTime @default(now())
   book       Books    @relation(fields: [bookId], references: [id])

@@ -1,9 +1,9 @@
 -- CreateTable
 CREATE TABLE "Books" (
     "id" UUID NOT NULL,
-    "kindleBookId" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "author" TEXT,
+    "kindleBookId" VARCHAR(100) NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "author" VARCHAR(255),
 
     CONSTRAINT "Books_pkey" PRIMARY KEY ("id")
 );

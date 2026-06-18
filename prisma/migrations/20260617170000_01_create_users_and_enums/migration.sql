@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "PreferredDisplayMode" AS ENUM ('IMMERSIVE', 'TRANSLATED');
 
+-- CreateEnum
+CREATE TYPE "Language" AS ENUM ('EN', 'PT', 'ES', 'FR');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,

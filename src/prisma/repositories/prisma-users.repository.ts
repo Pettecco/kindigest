@@ -4,6 +4,7 @@ import { User } from 'src/users/domain/user';
 import { PrismaService } from '../prisma.service';
 import { User as PrismaUser } from '../../../generated/prisma/client';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { PreferredDisplayMode } from 'generated/prisma/enums';
 
 @Injectable()
 export class PrismaUserRepository implements IUsersRepository {
@@ -38,6 +39,18 @@ export class PrismaUserRepository implements IUsersRepository {
       where: { id },
       data: { hashedRefreshToken: token },
     });
+  }
+
+  async updatePreferredDisplayMode(
+    id: string,
+    mode: PreferredDisplayMode,
+  ): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { preferredDisplayMode: mode },
+    });
+
+    return this.mapToDomain(user);
   }
 
   private mapToDomain(prismaUser: PrismaUser): User {

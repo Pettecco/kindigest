@@ -10,9 +10,11 @@ import {
 import { UsersController } from './users.controller';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FindUserByEmailDto } from './dto/find-user-by-email.dto';
+import { UpdatePreferredDisplayModeBodyDto } from './dto/update-preferred-display-mode.dto';
 import { CreateUserOutput } from './use-cases/create-user.use-case';
 import { FindUserByIdOutput } from './use-cases/find-user-by-id.use-case';
 import { FindUserByEmailOutput } from './use-cases/find-user-by-email.use-case';
+import { UpdatePreferredDisplayModeOutput } from './use-cases/update-preferred-display-mode.use-case';
 
 docs(UsersController, {
   classDecorators: [ApiTags('Users')],
@@ -106,6 +108,54 @@ docs(UsersController, {
       ApiResponse({
         status: 400,
         description: 'Bad request - validation error',
+      }),
+    ],
+
+    updatePreferredDisplayMode: [
+      ApiOperation({
+        summary: 'Update preferred display mode',
+        description:
+          'Updates the user preferred display mode (TRANSLATED or IMMERSIVE)',
+      }),
+      ApiParam({
+        name: 'id',
+        type: String,
+        description: 'User UUID',
+        example: '3b0c6501-e793-4bb6-ab20-549371276187',
+      }),
+      ApiBody({ type: UpdatePreferredDisplayModeBodyDto }),
+      ApiResponse({
+        status: 200,
+        description: 'Display mode updated successfully',
+        type: UpdatePreferredDisplayModeOutput,
+        example: {
+          id: '3b0c6501-e793-4bb6-ab20-549371276187',
+          email: 'user@example.com',
+          preferredDisplayMode: 'IMMERSIVE',
+          createdAt: '2026-06-16T13:45:00.000Z',
+        },
+      }),
+      ApiResponse({
+        status: 404,
+        description: 'User not found',
+        example: { message: 'User not found', statusCode: 404 },
+      }),
+      ApiResponse({
+        status: 403,
+        description: 'User does not have permission',
+        example: {
+          message: 'User does not have permission',
+          statusCode: 403,
+        },
+      }),
+      ApiResponse({
+        status: 400,
+        description: 'Bad request - validation error',
+      }),
+      ApiResponse({
+        status: 401,
+        description: 'Not logged in',
+        example: { message: 'Not logged in', statusCode: 401 },
       }),
     ],
   },

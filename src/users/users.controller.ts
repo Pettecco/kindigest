@@ -8,7 +8,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { WithDocs } from 'nestjs-docfy';
 import {
   CreateUserDto,
   FindUserByEmailDto,
@@ -23,7 +22,6 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { TokenPayloadParam } from 'src/auth/decorators/token-payload.decorator';
 
-@WithDocs()
 @Controller('users')
 export class UsersController {
   constructor(

@@ -1,4 +1,4 @@
-import { UserFactory } from '../../../src/users/domain/user.factory';
+import { UserFactory } from '../../../src/common/domain/user.factory';
 
 describe('UserFactory - Validation Errors', () => {
   it('should throw error for invalid email', () => {

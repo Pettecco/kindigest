@@ -1,4 +1,4 @@
-import { UserFactory } from '../../../src/users/domain/user.factory';
+import { UserFactory } from '../../../src/common/domain/user.factory';
 import { PreferredDisplayMode } from '../../../generated/prisma/enums';
 import { UserBuilder } from '../../__builders__/user.builder';
 

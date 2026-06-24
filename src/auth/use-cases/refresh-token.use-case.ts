@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
 import { IHashingServiceSymbol } from '../hashing/hashing.service';
 import type { IHashingService } from '../hashing/hashing.service';
-import { IUsersRepository } from '../../users/domain/user-repository';
+import { IUsersRepository } from 'src/common/domain';
 import { TokenDto } from '../dto/token.dto';
 
 @Injectable()

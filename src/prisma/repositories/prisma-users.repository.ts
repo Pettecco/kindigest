@@ -1,19 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { IUsersRepository } from '../../users/domain/user-repository';
-import { User } from 'src/users/domain/user';
+import { IUsersRepository, User } from 'src/common/domain';
 import { PrismaService } from '../prisma.service';
-import { User as PrismaUser } from '../../../generated/prisma/client';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserMapper } from '../mappers';
 import { PreferredDisplayMode } from 'generated/prisma/enums';
 
 @Injectable()
 export class PrismaUserRepository implements IUsersRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userMapper: UserMapper,
+  ) {}
 
   async create({
     email,
     password: passwordHash,
-  }: CreateUserDto): Promise<User> {
+  }: {
+    email: string;
+    password: string;
+  }): Promise<User> {
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -21,17 +25,17 @@ export class PrismaUserRepository implements IUsersRepository {
       },
     });
 
-    return this.mapToDomain(user);
+    return this.userMapper.toDomain(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    return user ? this.mapToDomain(user) : null;
+    return user ? this.userMapper.toDomain(user) : null;
   }
 
   async findById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    return user ? this.mapToDomain(user) : null;
+    return user ? this.userMapper.toDomain(user) : null;
   }
 
   async updateRefreshToken(id: string, token: string | null): Promise<void> {
@@ -50,17 +54,6 @@ export class PrismaUserRepository implements IUsersRepository {
       data: { preferredDisplayMode: mode },
     });
 
-    return this.mapToDomain(user);
-  }
-
-  private mapToDomain(prismaUser: PrismaUser): User {
-    return {
-      id: prismaUser.id,
-      email: prismaUser.email,
-      passwordHash: prismaUser.passwordHash,
-      hashedRefreshToken: prismaUser.hashedRefreshToken,
-      preferredDisplayMode: prismaUser.preferredDisplayMode,
-      createdAt: prismaUser.createdAt,
-    };
+    return this.userMapper.toDomain(user);
   }
 }

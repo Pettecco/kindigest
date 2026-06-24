@@ -35,6 +35,16 @@ export class MockUserRepository implements IUsersRepository {
     }
   }
 
+  async updatePreferredDisplayMode(
+    id: string,
+    mode: 'TRANSLATED' | 'IMMERSIVE',
+  ): Promise<User> {
+    const user = await this.users.find(u => u.id === id);
+    if (!user) throw new Error('User not found');
+    user.preferredDisplayMode = mode as any;
+    return user;
+  }
+
   addUser(user: User): void {
     this.users.push(user);
   }

@@ -1,13 +1,12 @@
-import { UserFactory } from '../../../src/common/domain/user.factory';
 import { PreferredDisplayMode } from '../../../generated/prisma/enums';
 import { UserBuilder } from '../../__builders__/user.builder';
 
-describe('UserFactory', () => {
-  it('should create a valid user', () => {
-    const user = UserFactory.create({
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-    });
+describe('User', () => {
+  it('should create a valid user via builder', () => {
+    const user = UserBuilder.create()
+      .withEmail('test@example.com')
+      .withPasswordHash('hashedPassword123')
+      .build();
 
     expect(user.email).toBe('test@example.com');
     expect(user.passwordHash).toBe('hashedPassword123');
@@ -18,47 +17,47 @@ describe('UserFactory', () => {
   });
 
   it('should create user with default display mode', () => {
-    const user = UserFactory.create({
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-    });
+    const user = UserBuilder.create()
+      .withEmail('test@example.com')
+      .withPasswordHash('hashedPassword123')
+      .build();
 
     expect(user.preferredDisplayMode).toBe(PreferredDisplayMode.TRANSLATED);
   });
 
   it('should create user with custom id', () => {
     const customId = 'custom-id-123';
-    const user = UserFactory.create({
-      id: customId,
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-    });
+    const user = UserBuilder.create()
+      .withId(customId)
+      .withEmail('test@example.com')
+      .withPasswordHash('hashedPassword123')
+      .build();
 
     expect(user.id).toBe(customId);
   });
 
   it('should create user with refresh token', () => {
-    const user = UserFactory.create({
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-      hashedRefreshToken: 'refreshToken123',
-    });
+    const user = UserBuilder.create()
+      .withEmail('test@example.com')
+      .withPasswordHash('hashedPassword123')
+      .withRefreshToken('refreshToken123')
+      .build();
 
     expect(user.hashedRefreshToken).toBe('refreshToken123');
   });
 
   it('should create user with custom dates', () => {
     const customDate = new Date('2024-01-01');
-    const user = UserFactory.create({
-      email: 'test@example.com',
-      passwordHash: 'hashedPassword123',
-      createdAt: customDate,
-    });
+    const user = UserBuilder.create()
+      .withEmail('test@example.com')
+      .withPasswordHash('hashedPassword123')
+      .withCreatedAt(customDate)
+      .build();
 
     expect(user.createdAt).toBe(customDate);
   });
 
-  it('should create user using builder pattern', () => {
+  it('should create user with immersive display mode', () => {
     const user = UserBuilder.create()
       .withEmail('builder@example.com')
       .withPasswordHash('hashed123')

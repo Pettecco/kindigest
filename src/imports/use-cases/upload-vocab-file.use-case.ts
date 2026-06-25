@@ -11,7 +11,8 @@ import {
 @Injectable()
 export class UploadVocabFileUseCase implements UseCase<void, void> {
   constructor(
-    @Inject(ILogger) private readonly logger: ILogger,
+    @Inject(ILogger)
+    private readonly logger: ILogger,
     @Inject(IImportsRepository)
     private readonly importsRepository: IImportsRepository,
     @Inject(IBooksRepository)

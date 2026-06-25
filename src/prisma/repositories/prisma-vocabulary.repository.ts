@@ -1,25 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { IVocabularyRepository } from 'src/common/domain';
+import { IVocabularyRepository, UpsertVocabularyInput } from 'src/common/domain';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class PrismaVocabularyRepository implements IVocabularyRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async upsertByUserBookWord(data: {
-    userId: string;
-    importId: string;
-    bookId: string;
-    wordId: string;
-    context: string | null;
-  }): Promise<{ created: boolean }> {
+  async upsertByUserBookWord({
+    userId,
+    importId,
+    bookId,
+    wordId,
+    context,
+  }: UpsertVocabularyInput): Promise<{ created: boolean }> {
     const existing = await this.prisma.vocabulary.findUnique({
       where: {
-        userId_bookId_wordId: {
-          userId: data.userId,
-          bookId: data.bookId,
-          wordId: data.wordId,
-        },
+        userId_bookId_wordId: { userId, bookId, wordId },
       },
     });
 
@@ -29,11 +25,11 @@ export class PrismaVocabularyRepository implements IVocabularyRepository {
 
     await this.prisma.vocabulary.create({
       data: {
-        userId: data.userId,
-        importId: data.importId,
-        bookId: data.bookId,
-        wordId: data.wordId,
-        context: data.context,
+        userId: userId,
+        importId: importId,
+        bookId: bookId,
+        wordId: wordId,
+        context: context,
       },
     });
 

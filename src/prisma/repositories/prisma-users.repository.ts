@@ -3,26 +3,18 @@ import { IUsersRepository, User } from 'src/common/domain';
 import { PrismaService } from '../prisma.service';
 import { UserMapper } from '../mappers';
 import { PreferredDisplayMode } from 'generated/prisma/enums';
+import { LoginDto } from 'src/auth/dto';
 
 @Injectable()
 export class PrismaUserRepository implements IUsersRepository {
   constructor(
-    private prisma: PrismaService,
-    private userMapper: UserMapper,
+    private readonly prisma: PrismaService,
+    private readonly userMapper: UserMapper,
   ) {}
 
-  async create({
-    email,
-    password: passwordHash,
-  }: {
-    email: string;
-    password: string;
-  }): Promise<User> {
+  async create({ email, password: passwordHash }: LoginDto): Promise<User> {
     const user = await this.prisma.user.create({
-      data: {
-        email,
-        passwordHash,
-      },
+      data: { email, passwordHash },
     });
 
     return this.userMapper.toDomain(user);
@@ -47,11 +39,11 @@ export class PrismaUserRepository implements IUsersRepository {
 
   async updatePreferredDisplayMode(
     id: string,
-    mode: PreferredDisplayMode,
+    preferredDisplayMode: PreferredDisplayMode,
   ): Promise<User> {
     const user = await this.prisma.user.update({
       where: { id },
-      data: { preferredDisplayMode: mode },
+      data: { preferredDisplayMode },
     });
 
     return this.userMapper.toDomain(user);

@@ -3,6 +3,7 @@ import { PreferredDisplayMode } from 'generated/prisma/enums';
 import { UseCase } from 'src/common/interfaces';
 import { IUsersRepository, User } from 'src/common/domain';
 import { ILogger } from 'src/common/interfaces/logger';
+import { UpdatePreferredDisplayModeBodyDto } from '../dto/update-preferred-display-mode.dto';
 
 export class UpdatePreferredDisplayModeUseCase implements UseCase<
   UpdatePreferredDisplayModeInput,
@@ -16,9 +17,9 @@ export class UpdatePreferredDisplayModeUseCase implements UseCase<
   ) {}
 
   async execute({
-    preferredDisplayMode,
     userId,
     requesterId,
+    preferredDisplayMode,
   }: UpdatePreferredDisplayModeInput): Promise<UpdatePreferredDisplayModeOutput> {
     this.logger.info('Updating preferred display mode');
 

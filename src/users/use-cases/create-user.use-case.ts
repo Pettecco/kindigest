@@ -6,6 +6,7 @@ import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service';
 import type { IHashingService } from '../../auth/hashing/hashing.service';
 import { PreferredDisplayMode } from 'generated/prisma/enums';
 import { ILogger } from '../../common/interfaces/logger';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class CreateUserUseCase implements UseCase<
@@ -21,35 +22,29 @@ export class CreateUserUseCase implements UseCase<
     private logger: ILogger,
   ) {}
 
-  async execute({
-    email,
-    password,
-  }: CreateUserInput): Promise<CreateUserOutput> {
-    await this.logger.info(`Creating user: ${email}`);
+  async execute(createUserDto: CreateUserDto): Promise<CreateUserOutput> {
+    await this.logger.info(`Creating user: ${createUserDto.email}`);
 
-    const existingUser = await this.usersRepository.findByEmail(email);
+    const existingUser = await this.usersRepository.findByEmail(createUserDto.email);
 
     if (existingUser) {
       throw new ConflictException('Email already in use');
     }
 
-    const passwordHash = await this.hashingService.hash(password);
+    const passwordHash = await this.hashingService.hash(createUserDto.password);
 
     const user = await this.usersRepository.create({
-      email,
+      email: createUserDto.email,
       password: passwordHash,
     });
 
-    await this.logger.info(`User created successfully: ${email}`);
+    await this.logger.info(`User created successfully: ${createUserDto.email}`);
 
     return user;
   }
 }
 
-export class CreateUserInput {
-  email: string;
-  password: string;
-}
+export class CreateUserInput extends CreateUserDto {}
 
 export class CreateUserOutput {
   id: string;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IImportsRepository, Import } from 'src/common/domain';
+import { IImportsRepository, Import, CreateImportInput, FindImportByIdInput } from 'src/common/domain';
 import { PrismaService } from '../prisma.service';
 import { ImportMapper } from '../mappers';
 
@@ -10,17 +10,17 @@ export class PrismaImportsRepository implements IImportsRepository {
     private importMapper: ImportMapper,
   ) {}
 
-  async create(userId: string): Promise<Import> {
+  async create(createImportInput: CreateImportInput): Promise<Import> {
     const importRecord = await this.prisma.imports.create({
-      data: { userId },
+      data: { userId: createImportInput.userId },
     });
 
     return this.importMapper.toDomain(importRecord);
   }
 
-  async findById(id: string): Promise<Import | null> {
+  async findById(findImportByIdInput: FindImportByIdInput): Promise<Import | null> {
     const importRecord = await this.prisma.imports.findUnique({
-      where: { id },
+      where: { id: findImportByIdInput.id },
     });
     return importRecord ? this.importMapper.toDomain(importRecord) : null;
   }

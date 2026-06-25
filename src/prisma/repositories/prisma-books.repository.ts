@@ -1,42 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { IBooksRepository, Book } from 'src/common/domain';
+import { IBooksRepository, Book, UpsertBookInput } from 'src/common/domain';
 import { PrismaService } from '../prisma.service';
 import { BookMapper } from '../mappers';
 
 @Injectable()
 export class PrismaBooksRepository implements IBooksRepository {
   constructor(
-    private prisma: PrismaService,
-    private bookMapper: BookMapper,
+    private readonly prisma: PrismaService,
+    private readonly bookMapper: BookMapper,
   ) {}
 
-  async upsertByKindleBookId(data: {
-    kindleBookId: string;
-    title: string;
-    author: string;
-  }): Promise<{ book: Book; created: boolean }> {
-    const existing = await this.prisma.books.findUnique({
-      where: { kindleBookId: data.kindleBookId },
+  async upsertByKindleBookId({
+    kindleBookId,
+    title,
+    author,
+  }: UpsertBookInput): Promise<{ book: Book; created: boolean }> {
+    const existingBook = await this.prisma.books.findUnique({
+      where: { kindleBookId },
     });
 
-    if (existing) {
+    if (existingBook) {
       const updated = await this.prisma.books.update({
-        where: { id: existing.id },
-        data: {
-          title: data.title,
-          author: data.author,
-        },
+        where: { id: existingBook.id },
+        data: { title, author },
       });
 
       return { book: this.bookMapper.toDomain(updated), created: false };
     }
 
     const created = await this.prisma.books.create({
-      data: {
-        kindleBookId: data.kindleBookId,
-        title: data.title,
-        author: data.author,
-      },
+      data: { kindleBookId, title, author },
     });
 
     return { book: this.bookMapper.toDomain(created), created: true };

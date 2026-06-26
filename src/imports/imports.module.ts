@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImportsController } from './imports.controller';
-import { UploadVocabFileUseCase } from './use-cases/upload-vocab-file.use-case';
+import { UploadVocabFileUseCase } from './use-cases/create-import.use-case';
 import { makeLogger } from '../common/factories/logger';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';

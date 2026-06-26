@@ -8,7 +8,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TokenPayloadParam } from '../auth/decorators/token-payload.decorator';
-import { UploadVocabFileUseCase } from './use-cases/upload-vocab-file.use-case';
+import { UploadVocabFileUseCase } from './use-cases/create-import.use-case';
+import { multerOptions } from './upload/multer.config';
 
 @Controller('imports')
 @UseGuards(JwtAuthGuard)
@@ -18,18 +19,15 @@ export class ImportsController {
   ) {}
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadFile(
     @TokenPayloadParam('sub') userId: string,
-    @UploadedFile()
-    file: { buffer: Buffer; originalname: string; mimetype: string },
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.uploadVocabFileUseCase
-      .execute
-      // {
-      //   userId,
-      //   file,
-      // }
-      ();
+    return this.uploadVocabFileUseCase.execute({
+      userId,
+      filePath: file.path,
+      originalName: file.originalname,
+    });
   }
 }

@@ -1,1 +1,1 @@
-export * from './upload-vocab-file.use-case';
+export * from './create-import.use-case';

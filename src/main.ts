@@ -3,8 +3,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { existsSync, mkdirSync } from 'fs';
+import { TEMP_UPLOAD_DIR } from './imports/upload/constants';
 
 async function bootstrap() {
+  if (!existsSync(TEMP_UPLOAD_DIR)) {
+    mkdirSync(TEMP_UPLOAD_DIR, {
+      recursive: true,
+    });
+  }
+
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(

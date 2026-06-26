@@ -16,34 +16,44 @@ model User {
   preferredDisplayMode PreferredDisplayMode @default(TRANSLATED)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
-  imports              Import[]
-  wordLearning         WordLearning[]
+
+  imports      Import[]
+  wordLearning WordLearning[]
 }
 
 model Import {
-  id           String         @id @default(uuid()) @db.Uuid
-  userId       String         @db.Uuid
-  importedAt   DateTime       @default(now())
+  id               String       @id @default(uuid()) @db.Uuid
+  userId           String       @db.Uuid
+  originalFileName String       @db.VarChar(255)
+  status           ImportStatus @default(PENDING)
+  createdAt        DateTime     @default(now())
+  startedAt        DateTime?
+  completedAt      DateTime?
+  failedAt         DateTime?
+  errorMessage     String?      @db.VarChar(1000)
+
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   wordLearning WordLearning[]
 }
 
 model Book {
-  id           String         @id @default(uuid()) @db.Uuid
-  kindleBookId String         @unique @db.VarChar(10)
-  title        String         @db.VarChar(255)
-  author       String         @db.VarChar(255)
+  id           String @id @default(uuid()) @db.Uuid
+  kindleBookId String @unique @db.VarChar(10)
+  title        String @db.VarChar(255)
+  author       String @db.VarChar(255)
+
   wordLearning WordLearning[]
 }
 
 model Word {
-  id             String         @id @default(uuid()) @db.Uuid
-  word           String         @db.VarChar(100)
-  stem           String?        @db.VarChar(100)
-  language       Language       @default(PT)
-  translatedWord String?        @db.VarChar(255)
-  wordLearning   WordLearning[]
-  definition     Definition?
+  id             String   @id @default(uuid()) @db.Uuid
+  word           String   @db.VarChar(100)
+  stem           String?  @db.VarChar(100)
+  language       Language @default(PT)
+  translatedWord String?  @db.VarChar(255)
+
+  wordLearning WordLearning[]
+  definition   Definition?
 
   @@unique([word, language])
 }
@@ -53,10 +63,11 @@ model Definition {
   wordId               String   @unique @db.Uuid
   definition           String?  @db.VarChar(2000)
   translatedDefinition String?  @db.VarChar(2000)
-  source               String?  @db.VarChar(100)
+  source               String   @db.VarChar(100)
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
-  word                 Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
 
   @@index([wordId])
 }
@@ -79,10 +90,11 @@ model WordLearning {
   context    String?  @db.VarChar(2000)
   learnCount Int      @default(0)
   createdAt  DateTime @default(now())
-  book       Book     @relation(fields: [bookId], references: [id])
-  import     Import   @relation(fields: [importId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  word       Word     @relation(fields: [wordId], references: [id])
+
+  book   Book   @relation(fields: [bookId], references: [id])
+  import Import @relation(fields: [importId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word   Word   @relation(fields: [wordId], references: [id])
 
   @@unique([userId, bookId, wordId])
   @@index([userId, createdAt])
@@ -99,4 +111,11 @@ enum Language {
   PT
   ES
   FR
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }

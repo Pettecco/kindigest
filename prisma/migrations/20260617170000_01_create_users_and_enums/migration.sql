@@ -4,6 +4,9 @@ CREATE TYPE "PreferredDisplayMode" AS ENUM ('IMMERSIVE', 'TRANSLATED');
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('EN', 'PT', 'ES', 'FR');
 
+-- CreateEnum
+CREATE TYPE "ImportStatus" AS ENUM ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,

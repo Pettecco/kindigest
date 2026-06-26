@@ -11,14 +11,21 @@ services:
       - '${POSTGRES_PORT}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  adminer:
-    image: adminer:latest
-    container_name: kindigest-adminer
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: kindigest-pgadmin
     restart: unless-stopped
-    ports:
-      - '8080:8080'
+    depends_on:
+      - postgres
     environment:
-      ADMINER_DEFAULT_SERVER: postgres
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
   postgres_data:
+  pgadmin_data:

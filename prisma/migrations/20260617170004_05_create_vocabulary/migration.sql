@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Vocabulary" (
+CREATE TABLE "WordLearning" (
     "id" UUID NOT NULL,
     "userId" UUID NOT NULL,
     "importId" UUID NOT NULL,
@@ -9,26 +9,26 @@ CREATE TABLE "Vocabulary" (
     "learnCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Vocabulary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "WordLearning_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE INDEX "Vocabulary_userId_createdAt_idx" ON "Vocabulary"("userId", "createdAt");
+CREATE INDEX "WordLearning_userId_createdAt_idx" ON "WordLearning"("userId", "createdAt");
 
 -- CreateIndex
-CREATE INDEX "Vocabulary_userId_learnCount_idx" ON "Vocabulary"("userId", "learnCount");
+CREATE INDEX "WordLearning_userId_learnCount_idx" ON "WordLearning"("userId", "learnCount");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Vocabulary_userId_bookId_wordId_key" ON "Vocabulary"("userId", "bookId", "wordId");
+CREATE UNIQUE INDEX "WordLearning_userId_bookId_wordId_key" ON "WordLearning"("userId", "bookId", "wordId");
 
 -- AddForeignKey
-ALTER TABLE "Vocabulary" ADD CONSTRAINT "Vocabulary_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "WordLearning" ADD CONSTRAINT "WordLearning_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Vocabulary" ADD CONSTRAINT "Vocabulary_importId_fkey" FOREIGN KEY ("importId") REFERENCES "Imports"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "WordLearning" ADD CONSTRAINT "WordLearning_importId_fkey" FOREIGN KEY ("importId") REFERENCES "Import"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Vocabulary" ADD CONSTRAINT "Vocabulary_bookId_fkey" FOREIGN KEY ("bookId") REFERENCES "Books"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "WordLearning" ADD CONSTRAINT "WordLearning_bookId_fkey" FOREIGN KEY ("bookId") REFERENCES "Book"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Vocabulary" ADD CONSTRAINT "Vocabulary_wordId_fkey" FOREIGN KEY ("wordId") REFERENCES "Words"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "WordLearning" ADD CONSTRAINT "WordLearning_wordId_fkey" FOREIGN KEY ("wordId") REFERENCES "Word"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

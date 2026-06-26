@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Definitions" (
+CREATE TABLE "Definition" (
     "id" UUID NOT NULL,
     "wordId" UUID NOT NULL,
     "definition" VARCHAR(2000),
@@ -8,7 +8,7 @@ CREATE TABLE "Definitions" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Definitions_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Definition_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -22,13 +22,13 @@ CREATE TABLE "TranslationUsage" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Definitions_wordId_key" ON "Definitions"("wordId");
+CREATE UNIQUE INDEX "Definition_wordId_key" ON "Definition"("wordId");
 
 -- CreateIndex
-CREATE INDEX "Definitions_wordId_idx" ON "Definitions"("wordId");
+CREATE INDEX "Definition_wordId_idx" ON "Definition"("wordId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TranslationUsage_month_key" ON "TranslationUsage"("month");
 
 -- AddForeignKey
-ALTER TABLE "Definitions" ADD CONSTRAINT "Definitions_wordId_fkey" FOREIGN KEY ("wordId") REFERENCES "Words"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Definition" ADD CONSTRAINT "Definition_wordId_fkey" FOREIGN KEY ("wordId") REFERENCES "Word"("id") ON DELETE CASCADE ON UPDATE CASCADE;

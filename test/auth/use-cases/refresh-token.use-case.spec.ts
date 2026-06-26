@@ -33,8 +33,8 @@ describe('RefreshTokenUseCase', () => {
     useCase = new RefreshTokenUseCase(
       mockJwtService,
       userRepository,
-      mockConfigService,
       mockHashingService,
+      mockConfigService,
     );
   });
 

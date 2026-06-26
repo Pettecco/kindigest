@@ -1,5 +1,5 @@
 import { PreferredDisplayMode } from '../../generated/prisma/enums';
-import { User } from '../../src/common/domain';
+import { User } from 'src/users/domain';
 
 export class UserBuilder {
   private id: string = 'user-id-123';

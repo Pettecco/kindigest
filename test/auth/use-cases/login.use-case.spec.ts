@@ -40,9 +40,9 @@ describe('LoginUseCase', () => {
     useCase = new LoginUseCase(
       userRepository,
       mockHashingService,
+      mockLogger,
       mockJwtService,
       mockConfigService,
-      mockLogger,
     );
   });
 

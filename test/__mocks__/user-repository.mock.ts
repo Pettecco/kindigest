@@ -1,4 +1,4 @@
-import { IUsersRepository, User } from '../../src/common/domain';
+import { IUsersRepository, User } from 'src/users/domain';
 
 export class MockUserRepository implements IUsersRepository {
   private users: User[] = [];

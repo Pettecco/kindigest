@@ -1,9 +1,8 @@
 import { ForbiddenException, Inject, NotFoundException } from '@nestjs/common';
 import { PreferredDisplayMode } from 'generated/prisma/enums';
 import { UseCase } from 'src/common/interfaces';
-import { IUsersRepository, User } from 'src/common/domain';
+import { IUsersRepository, User } from '../domain';
 import { ILogger } from 'src/common/interfaces/logger';
-import { UpdatePreferredDisplayModeBodyDto } from '../dto/update-preferred-display-mode.dto';
 
 export class UpdatePreferredDisplayModeUseCase implements UseCase<
   UpdatePreferredDisplayModeInput,

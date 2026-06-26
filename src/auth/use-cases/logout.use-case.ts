@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IUsersRepository } from 'src/common/domain';
+import { IUsersRepository } from 'src/users/domain';
 
 @Injectable()
 export class LogoutUseCase {
   constructor(
     @Inject(IUsersRepository)
-    private usersRepository: IUsersRepository,
+    private readonly usersRepository: IUsersRepository,
   ) {}
 
   async execute(userId: string): Promise<void> {

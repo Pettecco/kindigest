@@ -5,20 +5,20 @@ import { Inject } from '@nestjs/common';
 import { IHashingServiceSymbol } from '../hashing/hashing.service';
 import { ILogger } from '../../common/interfaces/logger';
 import type { IHashingService } from '../hashing/hashing.service';
-import { IUsersRepository } from 'src/common/domain';
+import { IUsersRepository } from 'src/users/domain';
 import { TokenDto } from '../dto/token.dto';
 
 @Injectable()
 export class LoginUseCase {
   constructor(
     @Inject(IUsersRepository)
-    private usersRepository: IUsersRepository,
+    private readonly usersRepository: IUsersRepository,
     @Inject(IHashingServiceSymbol)
-    private hashingService: IHashingService,
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly hashingService: IHashingService,
     @Inject(ILogger)
-    private logger: ILogger,
+    private readonly logger: ILogger,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async execute(email: string, password: string): Promise<TokenDto> {

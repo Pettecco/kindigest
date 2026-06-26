@@ -1,7 +1,7 @@
 import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { UseCase } from '../../common/interfaces/use-case';
-import { IUsersRepository } from 'src/common/domain';
-import type { IUsersRepository as IUsersRepositoryType } from 'src/common/domain';
+import { IUsersRepository } from '../domain';
+import type { IUsersRepository as IUsersRepositoryType } from '../domain';
 import { IHashingServiceSymbol } from '../../auth/hashing/hashing.service';
 import type { IHashingService } from '../../auth/hashing/hashing.service';
 import { PreferredDisplayMode } from 'generated/prisma/enums';

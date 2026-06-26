@@ -4,18 +4,18 @@ import { ConfigService } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
 import { IHashingServiceSymbol } from '../hashing/hashing.service';
 import type { IHashingService } from '../hashing/hashing.service';
-import { IUsersRepository } from 'src/common/domain';
+import { IUsersRepository } from 'src/users/domain';
 import { TokenDto } from '../dto/token.dto';
 
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     @Inject(IUsersRepository)
-    private usersRepository: IUsersRepository,
-    private configService: ConfigService,
+    private readonly usersRepository: IUsersRepository,
     @Inject(IHashingServiceSymbol)
-    private hashingService: IHashingService,
+    private readonly hashingService: IHashingService,
+    private configService: ConfigService,
   ) {}
 
   async execute(userId: string, refreshToken: string): Promise<TokenDto> {

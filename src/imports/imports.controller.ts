@@ -8,7 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TokenPayloadParam } from '../auth/decorators/token-payload.decorator';
-import { UploadVocabFileUseCase } from './use-cases';
+import { UploadVocabFileUseCase } from './use-cases/upload-vocab-file.use-case';
 
 @Controller('imports')
 @UseGuards(JwtAuthGuard)

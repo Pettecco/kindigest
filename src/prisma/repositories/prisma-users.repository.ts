@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { IUsersRepository, User } from 'src/common/domain';
+import {
+  IUsersRepository,
+  User,
+} from '../../users/domain/ports/users.repository';
 import { PrismaService } from '../prisma.service';
-import { UserMapper } from '../mappers';
-import { PreferredDisplayMode } from 'generated/prisma/enums';
-import { LoginDto } from 'src/auth/dto';
+import { UserMapper } from '../mappers/user.mapper';
+import { PreferredDisplayMode } from '../../../generated/prisma/enums';
+import { LoginDto } from '../../auth/dto';
 
 @Injectable()
 export class PrismaUserRepository implements IUsersRepository {

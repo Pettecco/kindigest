@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { IImportsRepository, Import, CreateImportInput, FindImportByIdInput } from 'src/common/domain';
+import {
+  IImportsRepository,
+  CreateImportInput,
+  FindImportByIdInput,
+} from '../../imports/domain/ports/imports.repository';
+import { Import } from '../../imports/domain/entities/import';
 import { PrismaService } from '../prisma.service';
-import { ImportMapper } from '../mappers';
+import { ImportMapper } from '../mappers/import.mapper';
 
 @Injectable()
 export class PrismaImportsRepository implements IImportsRepository {
@@ -18,7 +23,9 @@ export class PrismaImportsRepository implements IImportsRepository {
     return this.importMapper.toDomain(importRecord);
   }
 
-  async findById(findImportByIdInput: FindImportByIdInput): Promise<Import | null> {
+  async findById(
+    findImportByIdInput: FindImportByIdInput,
+  ): Promise<Import | null> {
     const importRecord = await this.prisma.imports.findUnique({
       where: { id: findImportByIdInput.id },
     });

@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { IWordsRepository, UpsertWordInput, Word } from 'src/common/domain';
+import {
+  IWordsRepository,
+  UpsertWordInput,
+} from '../../words/domain/ports/words.repository';
+import { Word } from '../../words/domain/entities/word';
 import { PrismaService } from '../prisma.service';
-import { WordMapper } from '../mappers';
-import { Language } from '../../../generated/prisma/client';
+import { WordMapper } from '../mappers/word.mapper';
 
 @Injectable()
 export class PrismaWordsRepository implements IWordsRepository {

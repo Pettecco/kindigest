@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IVocabularyRepository, UpsertVocabularyInput } from 'src/common/domain';
+import {
+  IVocabularyRepository,
+  UpsertVocabularyInput,
+} from '../../learning/domain/ports/vocabulary.repository';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()

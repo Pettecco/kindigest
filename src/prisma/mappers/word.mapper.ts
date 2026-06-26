@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DomainMapper } from './base.mapper';
 import { Words as PrismaWord } from '../../../generated/prisma/client';
-import { Word } from 'src/common/domain';
+import { Word } from '../../words/domain/entities/word';
 
 @Injectable()
 export class WordMapper extends DomainMapper<PrismaWord, Word> {

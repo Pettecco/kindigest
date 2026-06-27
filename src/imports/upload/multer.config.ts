@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { diskStorage } from 'multer';
 import {
   ALLOWED_EXTENSIONS,
@@ -15,7 +16,7 @@ export const multerOptions = {
     filename: (_req, file, callback) => {
       const extension = extname(file.originalname).toLowerCase();
 
-      callback(null, `${randomUUID}${extension}`);
+      callback(null, `${randomUUID()}${extension}`);
     },
   }),
 

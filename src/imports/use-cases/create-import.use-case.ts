@@ -2,11 +2,12 @@ import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { UseCase } from '../../common/interfaces/use-case';
 import { ILogger } from '../../common/interfaces/logger';
 import { IImportsRepository } from '../domain/ports/imports.repository';
+import { ImportStatus } from 'generated/prisma/enums';
 
 @Injectable()
-export class UploadVocabFileUseCase implements UseCase<
+export class CreateImportUseCase implements UseCase<
   CreateImportUseCaseInput,
-  void
+  CreateImportUseCaseOutput
 > {
   constructor(
     @Inject(ILogger)
@@ -19,12 +20,18 @@ export class UploadVocabFileUseCase implements UseCase<
     userId,
     filePath,
     originalName,
-  }: CreateImportUseCaseInput): Promise<void> {
-    this.logger.info('creating import for vocab.db');
+  }: CreateImportUseCaseInput): Promise<CreateImportUseCaseOutput> {
+    this.logger.info(
+      `Creating vocabulary import for user ${userId} (file: ${originalName})`,
+    );
 
     const importRecord = await this.importsRepository.create({
       userId,
+      status: ImportStatus.PENDING,
+      originalFileName: originalName,
     });
+
+    return { importId: importRecord.id };
   }
 }
 
@@ -32,4 +39,8 @@ export interface CreateImportUseCaseInput {
   userId: string;
   filePath: string;
   originalName: string;
+}
+
+export interface CreateImportUseCaseOutput {
+  importId: string;
 }

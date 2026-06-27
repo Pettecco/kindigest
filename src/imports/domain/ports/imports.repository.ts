@@ -1,7 +1,10 @@
+import { ImportStatus } from 'generated/prisma/client';
 import { Import } from '../entities';
 
 export interface CreateImportInput {
   userId: string;
+  originalFileName: string;
+  status?: ImportStatus;
 }
 
 export interface FindImportByIdInput {

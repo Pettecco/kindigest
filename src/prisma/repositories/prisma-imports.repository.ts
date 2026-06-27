@@ -15,9 +15,13 @@ export class PrismaImportsRepository implements IImportsRepository {
     private importMapper: ImportMapper,
   ) {}
 
-  async create(createImportInput: CreateImportInput): Promise<Import> {
+  async create({
+    userId,
+    originalFileName,
+    status,
+  }: CreateImportInput): Promise<Import> {
     const importRecord = await this.prisma.imports.create({
-      data: { userId: createImportInput.userId },
+      data: { userId, originalFileName, status },
     });
 
     return this.importMapper.toDomain(importRecord);

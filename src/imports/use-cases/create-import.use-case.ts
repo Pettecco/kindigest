@@ -1,4 +1,4 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { UseCase } from '../../common/interfaces/use-case';
 import { ILogger } from '../../common/interfaces/logger';
 import { IImportsRepository } from '../domain/ports/imports.repository';

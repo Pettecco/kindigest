@@ -1,4 +1,4 @@
-export interface Vocabulary {
+export interface WordLearning {
   id: string;
   userId: string;
   importId: string;

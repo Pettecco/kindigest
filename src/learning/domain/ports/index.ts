@@ -1,1 +1,1 @@
-export * from './vocabulary.repository';
+export * from './word-learning.repository';

@@ -31,7 +31,7 @@ export const multerOptions = {
     if (!ALLOWED_EXTENSIONS.includes(extension)) {
       return callback(
         new BadRequestException(
-          'Only Kindle vocabularu database (.db) files are allowed',
+          'Only Kindle vocabulary database (.db) files are allowed',
         ),
         false,
       );

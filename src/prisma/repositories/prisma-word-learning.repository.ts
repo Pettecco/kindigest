@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {
-  IVocabularyRepository,
-  UpsertVocabularyInput,
-} from '../../learning/domain/ports/vocabulary.repository';
+  IWordLearningRepository,
+  UpsertWordLearningInput,
+} from '../../learning/domain/ports/word-learning.repository';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
-export class PrismaVocabularyRepository implements IVocabularyRepository {
+export class PrismaWordLearningRepository implements IWordLearningRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async upsertByUserBookWord({
@@ -15,8 +15,8 @@ export class PrismaVocabularyRepository implements IVocabularyRepository {
     bookId,
     wordId,
     context,
-  }: UpsertVocabularyInput): Promise<{ created: boolean }> {
-    const existing = await this.prisma.vocabulary.findUnique({
+  }: UpsertWordLearningInput): Promise<{ created: boolean }> {
+    const existing = await this.prisma.wordLearning.findUnique({
       where: {
         userId_bookId_wordId: { userId, bookId, wordId },
       },
@@ -26,7 +26,7 @@ export class PrismaVocabularyRepository implements IVocabularyRepository {
       return { created: false };
     }
 
-    await this.prisma.vocabulary.create({
+    await this.prisma.wordLearning.create({
       data: {
         userId: userId,
         importId: importId,

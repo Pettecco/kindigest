@@ -19,12 +19,12 @@ export class PrismaBooksRepository implements IBooksRepository {
     title,
     author,
   }: UpsertBookInput): Promise<{ book: Book; created: boolean }> {
-    const existingBook = await this.prisma.books.findUnique({
+    const existingBook = await this.prisma.book.findUnique({
       where: { kindleBookId },
     });
 
     if (existingBook) {
-      const updated = await this.prisma.books.update({
+      const updated = await this.prisma.book.update({
         where: { id: existingBook.id },
         data: { title, author },
       });
@@ -32,7 +32,7 @@ export class PrismaBooksRepository implements IBooksRepository {
       return { book: this.bookMapper.toDomain(updated), created: false };
     }
 
-    const created = await this.prisma.books.create({
+    const created = await this.prisma.book.create({
       data: { kindleBookId, title, author },
     });
 

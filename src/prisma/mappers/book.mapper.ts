@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DomainMapper } from './base.mapper';
-import { Books as PrismaBook } from '../../../generated/prisma/client';
+import { Book as PrismaBook } from '../../../generated/prisma/client';
 import { Book } from '../../books/domain/entities/book';
 
 @Injectable()

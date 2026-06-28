@@ -20,12 +20,12 @@ export class PrismaWordsRepository implements IWordsRepository {
     language,
     translatedWord,
   }: UpsertWordInput): Promise<{ word: Word; created: boolean }> {
-    const existing = await this.prisma.words.findUnique({
+    const existing = await this.prisma.word.findUnique({
       where: { word_language: { word, language } },
     });
 
     if (existing) {
-      const updated = await this.prisma.words.update({
+      const updated = await this.prisma.word.update({
         where: { id: existing.id },
         data: { stem, translatedWord },
       });
@@ -33,7 +33,7 @@ export class PrismaWordsRepository implements IWordsRepository {
       return { word: this.wordMapper.toDomain(updated), created: false };
     }
 
-    const created = await this.prisma.words.create({
+    const created = await this.prisma.word.create({
       data: { word, stem, language, translatedWord },
     });
 

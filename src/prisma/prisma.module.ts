@@ -4,7 +4,7 @@ import { PrismaUserRepository } from './repositories/prisma-users.repository';
 import { PrismaImportsRepository } from './repositories/prisma-imports.repository';
 import { PrismaBooksRepository } from './repositories/prisma-books.repository';
 import { PrismaWordsRepository } from './repositories/prisma-words.repository';
-import { PrismaVocabularyRepository } from './repositories/prisma-vocabulary.repository';
+import { PrismaWordLearningRepository } from './repositories/prisma-word-learning.repository';
 import { UserMapper } from './mappers/user.mapper';
 import { ImportMapper } from './mappers/import.mapper';
 import { BookMapper } from './mappers/book.mapper';
@@ -13,7 +13,7 @@ import { IUsersRepository } from '../users/domain/ports/users.repository';
 import { IImportsRepository } from '../imports/domain/ports/imports.repository';
 import { IBooksRepository } from '../books/domain/ports/books.repository';
 import { IWordsRepository } from '../words/domain/ports/words.repository';
-import { IVocabularyRepository } from '../learning/domain/ports/vocabulary.repository';
+import { IWordLearningRepository } from '../learning/domain/ports/word-learning.repository';
 
 @Global()
 @Module({
@@ -43,10 +43,10 @@ import { IVocabularyRepository } from '../learning/domain/ports/vocabulary.repos
       provide: IWordsRepository,
       useExisting: PrismaWordsRepository,
     },
-    PrismaVocabularyRepository,
+    PrismaWordLearningRepository,
     {
-      provide: IVocabularyRepository,
-      useExisting: PrismaVocabularyRepository,
+      provide: IWordLearningRepository,
+      useExisting: PrismaWordLearningRepository,
     },
   ],
   exports: [
@@ -55,7 +55,7 @@ import { IVocabularyRepository } from '../learning/domain/ports/vocabulary.repos
     IImportsRepository,
     IBooksRepository,
     IWordsRepository,
-    IVocabularyRepository,
+    IWordLearningRepository,
   ],
 })
 export class PrismaModule {}

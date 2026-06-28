@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DomainMapper } from './base.mapper';
-import { Words as PrismaWord } from '../../../generated/prisma/client';
+import { Word as PrismaWord } from '../../../generated/prisma/client';
 import { Word } from '../../words/domain/entities/word';
 
 @Injectable()

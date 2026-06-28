@@ -3,6 +3,7 @@ import {
   IImportsRepository,
   CreateImportInput,
   FindImportByIdInput,
+  UpdateImportInput,
 } from '../../imports/domain/ports/imports.repository';
 import { Import } from '../../imports/domain/entities/import';
 import { PrismaService } from '../prisma.service';
@@ -20,7 +21,7 @@ export class PrismaImportsRepository implements IImportsRepository {
     originalFileName,
     status,
   }: CreateImportInput): Promise<Import> {
-    const importRecord = await this.prisma.imports.create({
+    const importRecord = await this.prisma.import.create({
       data: { userId, originalFileName, status },
     });
 
@@ -30,9 +31,19 @@ export class PrismaImportsRepository implements IImportsRepository {
   async findById(
     findImportByIdInput: FindImportByIdInput,
   ): Promise<Import | null> {
-    const importRecord = await this.prisma.imports.findUnique({
+    const importRecord = await this.prisma.import.findUnique({
       where: { id: findImportByIdInput.id },
     });
+
     return importRecord ? this.importMapper.toDomain(importRecord) : null;
+  }
+
+  async update({ id, ...data }: UpdateImportInput): Promise<Import> {
+    const importRecord = await this.prisma.import.update({
+      where: { id },
+      data,
+    });
+
+    return this.importMapper.toDomain(importRecord);
   }
 }

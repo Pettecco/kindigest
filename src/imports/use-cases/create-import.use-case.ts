@@ -3,6 +3,7 @@ import { UseCase } from '../../common/interfaces/use-case';
 import { ILogger } from '../../common/interfaces/logger';
 import { IImportsRepository } from '../domain/ports/imports.repository';
 import { ImportStatus } from 'generated/prisma/enums';
+import { IJobQueue, QUEUES } from 'src/common/queue';
 
 @Injectable()
 export class CreateImportUseCase implements UseCase<
@@ -14,6 +15,8 @@ export class CreateImportUseCase implements UseCase<
     private readonly logger: ILogger,
     @Inject(IImportsRepository)
     private readonly importsRepository: IImportsRepository,
+    @Inject(IJobQueue)
+    private readonly jobQueue: IJobQueue,
   ) {}
 
   async execute({
@@ -29,6 +32,11 @@ export class CreateImportUseCase implements UseCase<
       userId,
       status: ImportStatus.PENDING,
       originalFileName: originalName,
+    });
+
+    await this.jobQueue.enqueue(QUEUES.PROCESS_IMPORT, {
+      importId: importRecord.id,
+      filePath,
     });
 
     return { importId: importRecord.id };

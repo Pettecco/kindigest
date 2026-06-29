@@ -1,22 +1,31 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "rootDir": "..",
   "testEnvironment": "node",
-  "testRegex": ".spec.ts$",
+  "testRegex": "test/.*\\.spec\\.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(t|j)s$": ["ts-jest", { "tsconfig": "tsconfig.json" }]
   },
   "moduleNameMapper": {
-    "^src/(.*)$": "<rootDir>/../src/$1",
-    "^generated/(.*)$": "<rootDir>/../generated/$1"
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^generated/(.*)$": "<rootDir>/generated/$1"
   },
-  "coverageDirectory": "../coverage",
-  "collectCoverageFrom": ["../src/**/*.ts"],
+  "coverageDirectory": "coverage",
+  "collectCoverageFrom": ["src/**/*.ts"],
   "coveragePathIgnorePatterns": [
     ".module.ts$",
     ".controller.ts$",
     ".dto.ts$",
     "main.ts",
     "index.ts"
-  ]
+  ],
+  "coverageProvider": "v8",
+  "coverageThreshold": {
+    "global": {
+      "branches": 40,
+      "functions": 40,
+      "lines": 45,
+      "statements": 45
+    }
+  }
 }

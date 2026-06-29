@@ -17,15 +17,25 @@
     ".controller.ts$",
     ".dto.ts$",
     "main.ts",
-    "index.ts"
+    "index.ts",
+    "prisma.service.ts",
+    "/infrastructure/",
+    "/mappers/",
+    "/repositories/",
+    "/guards/",
+    "/decorators/",
+    "/config/",
+    "/domain/entities/",
+    "/factories/",
+    "/external/"
   ],
   "coverageProvider": "v8",
   "coverageThreshold": {
     "global": {
-      "branches": 40,
-      "functions": 40,
-      "lines": 45,
-      "statements": 45
+      "branches": 70,
+      "functions": 70,
+      "lines": 75,
+      "statements": 75
     }
   }
 }

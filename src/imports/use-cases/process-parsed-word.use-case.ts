@@ -7,8 +7,6 @@ import { IWordLearningRepository } from '../../learning/domain/ports/word-learni
 import { ParsedWord } from '../parser/parsed-word';
 import { Language } from 'generated/prisma/enums';
 
-const SUPPORTED_LANGUAGES: Set<string> = new Set(Object.values(Language));
-
 @Injectable()
 export class ProcessParsedWordUseCase implements UseCase<
   ProcessParsedWordInput,
@@ -32,8 +30,10 @@ export class ProcessParsedWordUseCase implements UseCase<
   }: ProcessParsedWordInput): Promise<void> {
     const language = parsedWord.lang.toUpperCase();
 
-    if (!SUPPORTED_LANGUAGES.has(language)) {
-      this.logger.debug(`Skipping unsupported language: ${parsedWord.lang} (${parsedWord.word})`);
+    if (!Object.values(Language).includes(language as Language)) {
+      this.logger.debug(
+        `Skipping unsupported language: ${parsedWord.lang} (${parsedWord.word})`,
+      );
       return;
     }
 

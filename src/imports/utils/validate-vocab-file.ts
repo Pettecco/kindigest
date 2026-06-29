@@ -8,7 +8,10 @@ import {
   EXPECTED_VOCAB_TABLES,
 } from '../infrastructure/upload/constants';
 
-export function validateVocabFile(filePath: string, originalName: string): void {
+export function validateVocabFile(
+  filePath: string,
+  originalName: string,
+): void {
   const sanitized = originalName.replace(INVALID_FILENAME_CHARS, '');
 
   if (sanitized !== originalName) {
@@ -38,7 +41,7 @@ export function validateVocabFile(filePath: string, originalName: string): void 
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all() as { name: string }[];
 
-    const tableNames = new Set(tables.map((t) => t.name));
+    const tableNames = new Set(tables.map(t => t.name));
 
     for (const table of EXPECTED_VOCAB_TABLES) {
       if (!tableNames.has(table)) {

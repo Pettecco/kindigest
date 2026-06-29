@@ -1,17 +1,8 @@
 import Database from 'better-sqlite3';
 import { Injectable } from '@nestjs/common';
 import { ParsedWord } from './parsed-word';
-import { MAX_VOCAB_ROWS, CONTROL_CHARS } from '../infrastructure/upload/constants';
-
-interface VocabRow {
-  word: string;
-  stem: string | null;
-  lang: string;
-  bookId: string;
-  bookTitle: string;
-  bookAuthor: string;
-  context: string | null;
-}
+import { MAX_VOCAB_ROWS } from '../infrastructure/upload/constants';
+import { clean } from '../utils';
 
 @Injectable()
 export class KindleVocabularyParser {
@@ -34,7 +25,7 @@ export class KindleVocabularyParser {
 
     let rowCount = 0;
 
-    for (const row of stmt.iterate() as IterableIterator<VocabRow>) {
+    for (const row of stmt.iterate() as IterableIterator<ParsedWord>) {
       if (rowCount >= MAX_VOCAB_ROWS) break;
 
       yield {
@@ -52,10 +43,4 @@ export class KindleVocabularyParser {
 
     db.close();
   }
-}
-
-function clean(value: string | null): string | null {
-  if (!value) return null;
-
-  return value.replace(CONTROL_CHARS, '').trim() || null;
 }

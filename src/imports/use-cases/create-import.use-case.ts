@@ -4,7 +4,7 @@ import { ILogger } from '../../common/interfaces/logger';
 import { IImportsRepository } from '../domain/ports/imports.repository';
 import { ImportStatus } from 'generated/prisma/enums';
 import { IJobQueue, QUEUES } from 'src/common/queue';
-import { validateVocabFile } from './validate-vocab-file';
+import { validateVocabFile } from '../utils';
 
 @Injectable()
 export class CreateImportUseCase implements UseCase<

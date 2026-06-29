@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "Book" (
     "id" UUID NOT NULL,
-    "kindleBookId" VARCHAR(10) NOT NULL,
+    "kindleBookId" VARCHAR(64) NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "author" VARCHAR(255) NOT NULL,
 

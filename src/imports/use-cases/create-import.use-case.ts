@@ -4,6 +4,7 @@ import { ILogger } from '../../common/interfaces/logger';
 import { IImportsRepository } from '../domain/ports/imports.repository';
 import { ImportStatus } from 'generated/prisma/enums';
 import { IJobQueue, QUEUES } from 'src/common/queue';
+import { validateVocabFile } from './validate-vocab-file';
 
 @Injectable()
 export class CreateImportUseCase implements UseCase<
@@ -24,6 +25,8 @@ export class CreateImportUseCase implements UseCase<
     filePath,
     originalName,
   }: CreateImportUseCaseInput): Promise<CreateImportUseCaseOutput> {
+    validateVocabFile(filePath, originalName);
+
     this.logger.info(
       `Creating vocabulary import for user ${userId} (file: ${originalName})`,
     );

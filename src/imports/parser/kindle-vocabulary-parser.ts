@@ -1,6 +1,17 @@
 import Database from 'better-sqlite3';
 import { Injectable } from '@nestjs/common';
 import { ParsedWord } from './parsed-word';
+import { MAX_VOCAB_ROWS, CONTROL_CHARS } from '../infrastructure/upload/constants';
+
+interface VocabRow {
+  word: string;
+  stem: string | null;
+  lang: string;
+  bookId: string;
+  bookTitle: string;
+  bookAuthor: string;
+  context: string | null;
+}
 
 @Injectable()
 export class KindleVocabularyParser {
@@ -21,18 +32,30 @@ export class KindleVocabularyParser {
       JOIN BOOK_INFO b ON b.id = l.book_key
     `);
 
-    for (const row of stmt.iterate() as IterableIterator<ParsedWord>) {
+    let rowCount = 0;
+
+    for (const row of stmt.iterate() as IterableIterator<VocabRow>) {
+      if (rowCount >= MAX_VOCAB_ROWS) break;
+
       yield {
-        word: row.word,
-        stem: row.stem,
-        lang: row.lang,
-        bookId: row.bookId,
-        bookTitle: row.bookTitle,
-        bookAuthor: row.bookAuthor,
-        context: row.context,
+        word: clean(row.word) || '',
+        stem: clean(row.stem),
+        lang: clean(row.lang) || '',
+        bookId: clean(row.bookId) || '',
+        bookTitle: clean(row.bookTitle) || '',
+        bookAuthor: clean(row.bookAuthor) || '',
+        context: clean(row.context),
       };
+
+      rowCount++;
     }
 
     db.close();
   }
+}
+
+function clean(value: string | null): string | null {
+  if (!value) return null;
+
+  return value.replace(CONTROL_CHARS, '').trim() || null;
 }

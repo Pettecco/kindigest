@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { existsSync, mkdirSync } from 'fs';
-import { TEMP_UPLOAD_DIR } from './imports/upload/constants';
+import { TEMP_UPLOAD_DIR } from './imports/infrastructure/upload/constants';
 
 async function bootstrap() {
   if (!existsSync(TEMP_UPLOAD_DIR)) {
@@ -27,6 +27,7 @@ async function bootstrap() {
     .setTitle('Kindigest API')
     .setDescription('API documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

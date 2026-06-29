@@ -1,15 +1,15 @@
-export interface JobQueueOpetions {
+export interface JobQueueOptions {
   delay?: number;
   attempts?: number;
   removeOnComplete?: boolean;
   removeOnFail?: boolean;
 }
 
-export interface JobQueue {
+export interface IJobQueue {
   enqueue<T>(
     queue: string,
     payload: T,
-    options?: JobQueueOpetions,
+    options?: JobQueueOptions,
   ): Promise<void>;
 }
 

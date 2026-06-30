@@ -27,7 +27,10 @@
     "/config/",
     "/domain/entities/",
     "/factories/",
-    "/external/"
+    "/external/",
+    ".constants.ts$",
+    ".interface.ts$",
+    "log-options.ts"
   ],
   "coverageProvider": "v8",
   "coverageThreshold": {

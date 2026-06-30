@@ -4,7 +4,6 @@ CREATE TABLE "Definition" (
     "wordId" UUID NOT NULL,
     "definition" VARCHAR(2000),
     "translatedDefinition" VARCHAR(2000),
-    "source" VARCHAR(100) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

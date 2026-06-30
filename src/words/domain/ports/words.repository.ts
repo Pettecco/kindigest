@@ -19,4 +19,8 @@ export interface IWordsRepository {
   upsertByWordAndLanguage(
     upsertWordInput: UpsertWordInput,
   ): Promise<{ word: Word; created: boolean }>;
+
+  findById(id: string): Promise<Word | null>;
+
+  update(input: { id: string; translatedWord: string | null }): Promise<Word>;
 }

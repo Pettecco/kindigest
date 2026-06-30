@@ -38,4 +38,15 @@ export class PrismaWordLearningRepository implements IWordLearningRepository {
 
     return { created: true };
   }
+
+  async findByWordId(
+    wordId: string,
+  ): Promise<{ context: string | null } | null> {
+    const wordLearning = await this.prisma.wordLearning.findFirst({
+      where: { wordId },
+      select: { context: true },
+    });
+
+    return wordLearning ? { context: wordLearning.context } : null;
+  }
 }

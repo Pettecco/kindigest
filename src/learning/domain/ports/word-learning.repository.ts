@@ -17,4 +17,6 @@ export interface IWordLearningRepository {
   upsertByUserBookWord(
     upsertWordLearningInput: UpsertWordLearningInput,
   ): Promise<{ created: boolean }>;
+
+  findByWordId(wordId: string): Promise<{ context: string | null } | null>;
 }

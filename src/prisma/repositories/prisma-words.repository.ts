@@ -39,4 +39,23 @@ export class PrismaWordsRepository implements IWordsRepository {
 
     return { word: this.wordMapper.toDomain(created), created: true };
   }
+
+  async findById(id: string): Promise<Word | null> {
+    const word = await this.prisma.word.findUnique({ where: { id } });
+    return word ? this.wordMapper.toDomain(word) : null;
+  }
+
+  async update({
+    id,
+    translatedWord,
+  }: {
+    id: string;
+    translatedWord: string | null;
+  }): Promise<Word> {
+    const word = await this.prisma.word.update({
+      where: { id },
+      data: { translatedWord },
+    });
+    return this.wordMapper.toDomain(word);
+  }
 }

@@ -8,7 +8,7 @@ import { ImportsModule } from './imports/imports.module';
 import { WordsModule } from './words/words.module';
 import { BooksModule } from './books/books.module';
 import { LearningModule } from './learning/learning.module';
-import { DefinitionsModule } from './definitions/definitions.module';
+import { DictionaryModule } from './dictionary/dictionary.module';
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import { DefinitionsModule } from './definitions/definitions.module';
     WordsModule,
     BooksModule,
     LearningModule,
-    DefinitionsModule,
+    DictionaryModule,
   ],
 })
 export class AppModule {}
